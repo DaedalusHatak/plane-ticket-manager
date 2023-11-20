@@ -6,12 +6,13 @@ import { handleSubmit } from './serverActions';
 
 export default function Form() {
 const [numberOfSeats,setNumberOfSeats] = useState("");
+const [flightNumber,setFlightNumber] = useState("");
 
 function handleSubmition(e:FormEvent){
     e.preventDefault();
     const number = parseInt(numberOfSeats);
    if(!isNaN(number)){
-    handleSubmit("tester",number,6);
+    handleSubmit(flightNumber,number,6);
    }else{
     console.log("Not a Number")
    }
@@ -20,7 +21,16 @@ function handleSubmition(e:FormEvent){
   return (
    <>
 <form action="" onSubmit={(e)=>handleSubmition(e)}>
-<input type="text" onChange={(e)=>setNumberOfSeats(e.target.value)} />
+<div>
+<label>Seats available:</label>
+<input type="number" onChange={(e)=>setNumberOfSeats(e.target.value)} />
+
+</div>
+<div>
+<label>Flight code:</label>
+<input type="text" value={flightNumber}  onChange={(e)=>setFlightNumber(e.target.value.toUpperCase())} />
+
+</div>
 <button>Submit</button>
 </form>
    </>
