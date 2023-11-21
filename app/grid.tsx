@@ -16,7 +16,8 @@ splitData()
         className={`p-4 col-span-1 bg-lime-600 ${typeof element === 'number' ? 'mx-auto text-center' : ''}`}
         key={index}
       >
-        {typeof element === 'number' ? element : element.seatNumber}
+        {typeof element === 'number' && element}
+        {element.seatNumber !== "01D" && element.seatNumber !== "01E" && element.seatNumber !== "01F" && typeof element !== 'number'  && element.seatNumber}
       </div>
 ))}
     </div>

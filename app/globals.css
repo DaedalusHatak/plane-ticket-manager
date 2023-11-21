@@ -18,10 +18,14 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+ 
+}
+.border-plane{
+  border-top-right-radius: 12rem 20rem;
+  border-top-left-radius: 12rem 20rem;
+  border-bottom-right-radius: 5rem 8rem;
+  border-bottom-left-radius: 5rem 8rem;
+  padding: 17rem 2rem 10rem 2rem;
+  border: 0.3rem solid #d2d6d9; 
+  margin-top: -11rem; 
 }
