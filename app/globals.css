@@ -18,14 +18,28 @@
 
 body {
   color: rgb(var(--foreground-rgb));
+  background-color: #f4f4f4;
  
 }
 .border-plane{
-  border-top-right-radius: 12rem 20rem;
-  border-top-left-radius: 12rem 20rem;
+  border-top-right-radius: 8rem 20rem;
+  border-top-left-radius: 8rem 20rem;
   border-bottom-right-radius: 5rem 8rem;
   border-bottom-left-radius: 5rem 8rem;
-  padding: 17rem 2rem 10rem 2rem;
+  padding: 17rem 0.5rem 10rem ;
   border: 0.3rem solid #d2d6d9; 
   margin-top: -11rem; 
+}
+@media screen and (min-width: 640px){
+  .border-plane{
+    border-top-right-radius: 12rem 20rem;
+    border-top-left-radius: 12rem 20rem;
+    padding: 17rem 2rem 10rem;
+  }
+  .boxed-border{
+    background-image: linear-gradient(to bottom,var(--light-base, #fff),var(--bg-blue, #f2f8fc) 1%);
+    border: 1px solid #c3c7cc;
+    border-top: none;
+  }
+  
 }

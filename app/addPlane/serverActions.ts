@@ -47,7 +47,6 @@ export async function handleSubmit(
 	for (let i = 0; i < seatNumber; i++) {
 		const currentRow = Math.floor(i / rowSeats) + 1;
 		const currentCol = i + (1 % rowSeats) === 0 ? rowSeats : i % rowSeats;
-		console.log(currentRow);
 		documents.push({
 			seatNumber: generateSeatNumber(currentCol, currentRow),
 			isTaken: false,
