@@ -1,18 +1,45 @@
+"use client"
+import { useEffect, useState } from "react";
 import Seat from "./seat";
 
-export default function Grid({ data }: any) {
-  const chunkedArray: any = [];
-  function splitData() {
-    for (let i = 0; i < data.length; i += 6) {
-      const chunk = data.slice(i, i + 6);
-      chunkedArray.push(
-        ...chunk.slice(0, 3),
-        Math.floor(i / 6) + 1,
-        ...chunk.slice(3)
-      );
-    }
-  }
-  splitData();
+import { changeSeat } from "./serverActions";
+
+export default function Grid({ data }: {data:Seat[]}) {
+  const [chunkedArray,setChunkedArray] = useState<Seat[]>(data)
+
+ 
+
+ async function updateSeat(element:Seat){
+    const updatedElement = {
+        ...element,
+      isTaken: true,
+      name: "Paweł Kiciński"
+      // Add other fields you want to update
+    };
+  
+    const idx=chunkedArray.findIndex((e:Seat)=> element.seatNumber === e.seatNumber);
+    setChunkedArray((prevArray:Seat[])=> {
+        const newArray = [...prevArray];
+        if(newArray[idx].isTaken === false){
+          newArray[idx] = updatedElement;
+          newArray.forEach((e,i) => {
+            if (i !== idx && e.name && e.name === updatedElement.name){
+                const updatedData = {...e, isTaken:false};
+                delete updatedData.name;
+
+                newArray[i] = updatedData
+                
+            }
+        })
+        }
+
+       
+
+        return newArray;
+      });
+
+      await changeSeat(element,updatedElement)  //updates mongo documents
+ }
   return (
     <section className=" text-black w-full">
       <div className="overflow-y-hidden w-full  flex justify-center">
@@ -34,7 +61,7 @@ export default function Grid({ data }: any) {
                 element.seatNumber !== "01D" &&
                 element.seatNumber !== "01E" &&
                 element.seatNumber !== "01F" && (
-                  <Seat seat={JSON.parse(JSON.stringify(element))}></Seat>
+                  <Seat setNewSeat={updateSeat} seat={element}></Seat>
                 )}
             </div>
           ))}
