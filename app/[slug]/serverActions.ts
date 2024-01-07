@@ -1,7 +1,7 @@
 "use server"
 import mongoose from "mongoose";
 
-export async function changeSeat(element:Seat,updatedElement:Seat) {
+export async function changeSeat(element:SeatMongo,updatedElement:SeatMongo) {
 
     
 

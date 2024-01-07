@@ -2,29 +2,26 @@
 import { useEffect, useState } from "react";
 import Seat from "./seat";
 
-import { changeSeat } from "./serverActions";
-
-export default function Grid({ data }: {data:SeatMongo[]}) {
-  const [chunkedArray,setChunkedArray] = useState<SeatMongo[]>(data)
+export default function Grid({ data }: {data:any}) {
+  const [chunkedArray,setChunkedArray] = useState<Seat[]>(data)
 
  
 
- async function updateSeat(element:SeatMongo){
+ async function updateSeat(element:Seat){
     const updatedElement = {
         ...element,
-      isTaken: true,
-      name: "Paweł Kiciński"
-      // Add other fields you want to update
+      is_taken: true,
+      name: "Paweł Sr"
     };
   
-    const idx=chunkedArray.findIndex((e:SeatMongo)=> element.seatNumber === e.seatNumber);
-    setChunkedArray((prevArray:SeatMongo[])=> {
+    const idx=chunkedArray.findIndex((e:Seat)=> element.seat_number === e.seat_number);
+    setChunkedArray((prevArray:Seat[])=> {
         const newArray = [...prevArray];
-        if(newArray[idx].isTaken === false){
+        if(newArray[idx].is_taken === false){
           newArray[idx] = updatedElement;
           newArray.forEach((e,i) => {
             if (i !== idx && e.name && e.name === updatedElement.name){
-                const updatedData = {...e, isTaken:false};
+                const updatedData = {...e, is_taken:false};
                 delete updatedData.name;
 
                 newArray[i] = updatedData
@@ -38,7 +35,6 @@ export default function Grid({ data }: {data:SeatMongo[]}) {
         return newArray;
       });
 
-      await changeSeat(element,updatedElement)  //updates mongo documents
  }
   return (
     <section className=" text-black w-full">
@@ -48,9 +44,9 @@ export default function Grid({ data }: {data:SeatMongo[]}) {
             <div
               className={`relative flex justify-center items-center mx-auto text-center col-span-1 ${
                 typeof element !== "number" &&
-                element.seatNumber !== "01D" &&
-                element.seatNumber !== "01E" &&
-                element.seatNumber !== "01F"
+                element.seat_number !== "01D" &&
+                element.seat_number !== "01E" &&
+                element.seat_number !== "01F"
                   ? "bg-[#166bc8] h-8 w-8"
                   : ""
               } `}
@@ -58,9 +54,9 @@ export default function Grid({ data }: {data:SeatMongo[]}) {
             >
               {typeof element === "number" && <p>{element}</p>}
               {typeof element !== "number" &&
-                element.seatNumber !== "01D" &&
-                element.seatNumber !== "01E" &&
-                element.seatNumber !== "01F" && (
+                element.seat_number !== "01D" &&
+                element.seat_number !== "01E" &&
+                element.seat_number !== "01F" && (
                   <Seat setNewSeat={updateSeat} seat={element}></Seat>
                 )}
             </div>
