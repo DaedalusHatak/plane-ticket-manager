@@ -1,46 +1,42 @@
-"use client"
+"use client";
 import { useEffect, useState } from "react";
 import Seat from "./seat";
 
-export default function Grid({ data }: {data:any}) {
-  const [chunkedArray,setChunkedArray] = useState<Seat[]>(data)
+export default function Grid({ data }: { data: Seat[] }) {
+  const [chunkedArray, setChunkedArray] = useState<Seat[]>(data);
 
- 
-
- async function updateSeat(element:Seat){
+  async function updateSeat(element: Seat) {
     const updatedElement = {
-        ...element,
+      ...element,
       is_taken: true,
-      name: "Paweł Sr"
+      name: "Paweł Sr",
     };
-  
-    const idx=chunkedArray.findIndex((e:Seat)=> element.seat_number === e.seat_number);
-    setChunkedArray((prevArray:Seat[])=> {
-        const newArray = [...prevArray];
-        if(newArray[idx].is_taken === false){
-          newArray[idx] = updatedElement;
-          newArray.forEach((e,i) => {
-            if (i !== idx && e.name && e.name === updatedElement.name){
-                const updatedData = {...e, is_taken:false};
-                delete updatedData.name;
 
-                newArray[i] = updatedData
-                
-            }
-        })
-        }
+    const idx = chunkedArray.findIndex(
+      (e: Seat) => element.seat_number === e.seat_number
+    );
+    setChunkedArray((prevArray: Seat[]) => {
+      const newArray = [...prevArray];
+      if (newArray[idx].is_taken === false) {
+        newArray[idx] = updatedElement;
+        newArray.forEach((e, i) => {
+          if (i !== idx && e.name && e.name === updatedElement.name) {
+            const updatedData = { ...e, is_taken: false };
+            delete updatedData.name;
 
-       
+            newArray[i] = updatedData;
+          }
+        });
+      }
 
-        return newArray;
-      });
-
- }
+      return newArray;
+    });
+  }
   return (
     <section className=" text-black w-full">
       <div className="overflow-y-hidden w-full  flex justify-center">
         <div className=" grid grid-cols-[repeat(7,minmax(0,min-content))] gap-3 border-plane ">
-          {chunkedArray.map((element: any, index: number) => (
+          {chunkedArray.map((element: Seat, index: number) => (
             <div
               className={`relative flex justify-center items-center mx-auto text-center col-span-1 ${
                 typeof element !== "number" &&

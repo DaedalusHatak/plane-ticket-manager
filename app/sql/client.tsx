@@ -4,7 +4,12 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { ChangeEvent, useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  ChangeEventHandler,
+  useEffect,
+  useState,
+} from "react";
 import { Button, TextField, styled } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import Backdrop from "@mui/material/Backdrop";
@@ -15,18 +20,35 @@ import {
   Unstable_NumberInput as BaseNumberInput,
   numberInputClasses,
 } from "@mui/base/Unstable_NumberInput";
-const priceTags = ["XL Front", "Fast Exit", "Front", "XL Back", "Cheap"];
+const priceTags: string[] = [
+  "XL Front",
+  "Fast Exit",
+  "Front",
+  "XL Back",
+  "Cheap",
+];
 
 import { handleInsertFlights } from "./serverActions";
 
-function PriceComponent({ price, idx, setArrOfPrices }: any) {
+function PriceComponent({
+  price,
+  idx,
+  setArrOfPrices,
+}: {
+  idx: number;
+  setArrOfPrices: Function;
+  price: string;
+}) {
   const [focus, setFocus] = useState(false);
-  const handlePrices = (e: any, index: number) => {
+  const handlePrices = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
     if (e.target.value !== "") setFocus(true);
-
+    console.log(e);
     const regex = /^[0-9\b]+$/;
     if (e.target.value === "" || regex.test(e.target.value)) {
-      setArrOfPrices((prev: any) => {
+      setArrOfPrices((prev: string[]) => {
         const newArr = [...prev];
         newArr[index] = e.target.value;
         return newArr;
@@ -50,7 +72,9 @@ function PriceComponent({ price, idx, setArrOfPrices }: any) {
         min={0}
         onFocus={(e) => setFocus(true)}
         onBlur={(e) => (price === "" ? setFocus(false) : setFocus(true))}
-        onChange={(e) => handlePrices(e, idx)}
+        onChange={(e) =>
+          handlePrices(e as React.ChangeEvent<HTMLInputElement>, idx)
+        }
         className={`${"Mui-error" ? "border-red-600" : ""}`}
         onInputChange={(e) => handlePrices(e, idx)}
         slots={{
