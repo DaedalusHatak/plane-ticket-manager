@@ -20,6 +20,9 @@ import {
   Unstable_NumberInput as BaseNumberInput,
   numberInputClasses,
 } from "@mui/base/Unstable_NumberInput";
+import { handleInsertFlights } from "../serverActions";
+
+
 const priceTags: string[] = [
   "XL Front",
   "Fast Exit",
@@ -28,7 +31,7 @@ const priceTags: string[] = [
   "Cheap",
 ];
 
-import { handleInsertFlights } from "./serverActions";
+
 
 function PriceComponent({
   price,
@@ -40,6 +43,8 @@ function PriceComponent({
   price: string;
 }) {
   const [focus, setFocus] = useState(false);
+
+
   const handlePrices = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
@@ -100,6 +105,8 @@ export default function BasicSelect({ allPlanes }: { allPlanes: Plane[] }) {
   const [plane, setPlane] = useState<Plane | null>();
   const [arrOfPrices, setArrOfPrices] = useState(Array(5).fill(""));
   const [tickets, setTickets] = useState<string>("");
+  const [origin, setOrigin] = useState<string>("");
+  const [destination, setDestination] = useState<string>("");
   const [open, setOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const handleOpen = () => setOpen(true);
@@ -122,15 +129,19 @@ export default function BasicSelect({ allPlanes }: { allPlanes: Plane[] }) {
     p: 4,
   };
 
-  const handleChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
-    setTickets(event.target.value);
+  const handleChangeInput = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,name:string) => {
+    if(name === "ticket") setTickets(event.target.value);
+    else if (name === "origin")  setOrigin(event.target.value);
+    else if (name === "destination")  setDestination(event.target.value);
   };
 
   const handleSubmit = async () => {
     const insertFlight = await handleInsertFlights(
       plane!,
       tickets,
-      arrOfPrices
+      arrOfPrices,
+      origin,
+      destination,
     );
     if (typeof insertFlight === "string") {
       setOpen(true);
@@ -201,11 +212,34 @@ export default function BasicSelect({ allPlanes }: { allPlanes: Plane[] }) {
           <TextField
             required
             value={tickets}
-            onChange={handleChangeInput}
+            onChange={e => handleChangeInput(e,"ticket")}
             id="ticket"
             label="Flight Code"
             variant="filled"
           />
+
+          <Box sx={{
+            display:"flex"
+          }}>
+          <TextField
+            required
+            fullWidth
+            value={origin}
+            onChange={e => handleChangeInput(e,"origin")}
+            id="origin"
+            label="Origin"
+            variant="filled"
+          />
+             <TextField
+            required
+            fullWidth
+            value={destination}
+            onChange={e => handleChangeInput(e,"destination")}
+            id="destination"
+            label="Destination"
+            variant="filled"
+          />
+          </Box>
           <Typography className="text-center" variant="h6" component="h2">
             Set prices
           </Typography>
