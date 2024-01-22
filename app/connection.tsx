@@ -5,7 +5,13 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import SendIcon from "@mui/icons-material/Send";
 import { handleFindingConnection } from "./serverActions";
 import FlightIcon from "@mui/icons-material/Flight";
+import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { modalState, openModal } from "@/store/modal";
 export default function FindConnection() {
+  const router = useRouter();
+  const modal = useAppSelector((state) => state.modalState.value);
+  const dispatch = useAppDispatch();
   const [connections, setConnections] = useState([]);
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
@@ -22,7 +28,16 @@ export default function FindConnection() {
       setError("No connections found");
     }
   };
-
+  const handleClick = (link: string) => {
+    // router.push(link);
+    dispatch(
+      openModal({
+        message: "Explore Flight Details (Leaving Page)",
+        title: "You are about to leave this page",
+        link: link,
+      })
+    );
+  };
   const handleChangeInput = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     name: string
@@ -31,7 +46,7 @@ export default function FindConnection() {
     else if (name === "destination") setDestination(event.target.value);
   };
   return (
-    <div className="w-full max-w-4xl ">
+    <div className=" w-full max-w-4xl ">
       <form className="grid grid-cols-2" onSubmit={handleSubmit}>
         <TextField
           onChange={(e) => handleChangeInput(e, "origin")}
@@ -63,8 +78,9 @@ export default function FindConnection() {
       {connections.length > 0 &&
         connections.map((connection: any) => (
           <div
-            className="relative mt-4 flex w-full justify-between items-center bg-gray-300 min-h-[62px] rounded-md"
+            className=" cursor-pointer relative mt-4 flex w-full justify-between items-center bg-gray-300 min-h-[62px] rounded-md"
             key={connection.id}
+            onClick={(e) => handleClick(connection.tickets_name)}
           >
             <Typography className="absolute left-4 text-xs md:text-base">
               {connection.tickets_name}
