@@ -1,11 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { modalState } from "./modal";
+import  modalState  from "./modal";
 import { useDispatch, useSelector, useStore } from "react-redux";
 import type { TypedUseSelectorHook } from "react-redux";
+import flightSearch from "./flightSearch";
 
 export const makeStore = () => {
   return configureStore({
-    reducer: { modalState: modalState.reducer },
+    reducer: { modalState, flightSearch},
   });
 };
 

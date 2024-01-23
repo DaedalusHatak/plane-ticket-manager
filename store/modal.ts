@@ -1,13 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+export type Modal = {
+  value:boolean,
+  message:string,
+  title:string,
+  link:string,
+}
+const initialState:Modal = {
+  value:false,
+  message:"",
+  title:"",
+  link:"",
+}
 export const modalState = createSlice({
   name: "modal",
-  initialState: {
-    value: false,
-    message: "",
-    title: "",
-    link: "",
-  },
+  initialState,
   reducers: {
     openModal: (state, action) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
@@ -26,3 +32,4 @@ export const modalState = createSlice({
 });
 
 export const { openModal, closeModal } = modalState.actions;
+export default modalState.reducer

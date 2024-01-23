@@ -1,6 +1,6 @@
 "use client";
+
 import { useAppDispatch, useAppSelector } from "@/store/store";
-import Modal from "@mui/material/Modal";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import { closeModal } from "@/store/modal";
@@ -9,8 +9,13 @@ import { Box, DialogContent, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 export default function BasicModal() {
   const router = useRouter();
-  const modal = useAppSelector((state) => state.modalState);
+  const modal = useAppSelector(state => state.modalState);
   const dispatch = useAppDispatch();
+
+const navigateTo =  () => {
+  dispatch(closeModal())
+  router.push(modal.link)
+}
 
   return (
     <div className=" w-full max-w-4xl ">
@@ -35,7 +40,7 @@ export default function BasicModal() {
             <Button
               className="col-span-2 w-full mt-3 bg-blue-500 hover:bg-blue-900 hover:shadow-[0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)]"
               variant="contained"
-              onClick={(e) => router.push(modal.link)}
+              onClick={(e) => navigateTo()}
             >
               Confirm
             </Button>

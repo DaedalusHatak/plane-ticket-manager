@@ -46,3 +46,15 @@ body {
   }
   
 }
+
+
+.bg-plane{
+  
+  background:  url("../public/plane-transparent.webp");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-clip: border-box;
+  background-position: center;
+
+
+}
