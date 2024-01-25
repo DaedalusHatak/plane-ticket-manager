@@ -14,6 +14,7 @@ export const handleInsertFlights = async (
     await sql`INSERT INTO flights (plane,tickets_name,prices,origin,destination) values(${plane?.name},${tickets},${pricesArrayString},${origin}, ${destination})`;
     return true;
   } catch (e: any) {
+    console.log(e)
     return e.message;
   }
 };

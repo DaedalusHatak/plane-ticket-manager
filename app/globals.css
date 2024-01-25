@@ -50,11 +50,18 @@ body {
 
 .bg-plane{
   
-  background:  url("../public/plane-transparent.webp");
+  background-image:  url("../public/airplane.png");
   background-repeat: no-repeat;
-  background-size: cover;
   background-clip: border-box;
   background-position: center;
 
 
+}
+.text-stroke-white{
+  mix-blend-mode: difference;
+  color:black;
+  filter:invert(100%)
+}
+.text-stroke-black{
+  mix-blend-mode: difference;
 }

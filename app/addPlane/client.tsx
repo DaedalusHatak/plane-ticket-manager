@@ -7,6 +7,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import React, {
   ChangeEvent,
   ChangeEventHandler,
+  FormEvent,
   useEffect,
   useState,
 } from "react";
@@ -66,7 +67,6 @@ function PriceComponent({
       sx={{
         position: "relative",
         background: "rgba(0,0,0,0.06)",
-        boxShadow: `0px 2px 2px ${grey[50]};`,
         borderRadius: "8px",
 
         height: "45px",
@@ -85,11 +85,12 @@ function PriceComponent({
         slots={{
           root: StyledInputRoot,
           input: StyledInputElement,
+        
         }}
         slotProps={{ input: { className: "placeholder-opacity-100" } }}
       ></BaseNumberInput>
       <label
-        className={`text-gray-400 absolute pl-2 -z-10 transition-all peer-focus:top-0 ${
+        className={`text-gray-600 absolute pl-2 z-1 transition-all peer-focus:top-0 ${
           focus === true
             ? "top-0  text-[12px]"
             : "top-[50%] translate-y-[-50%] text-[15px]"
@@ -135,7 +136,8 @@ export default function BasicSelect({ allPlanes }: { allPlanes: Plane[] }) {
     else if (name === "destination")  setDestination(event.target.value);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e:FormEvent) => {
+    e.preventDefault();
     const insertFlight = await handleInsertFlights(
       plane!,
       tickets,
@@ -143,7 +145,8 @@ export default function BasicSelect({ allPlanes }: { allPlanes: Plane[] }) {
       origin,
       destination,
     );
-    if (typeof insertFlight === "string") {
+    console.log(insertFlight)
+    if (typeof insertFlight  === "string") {
       setOpen(true);
       const err = insertFlight
         .split("ERROR:")[1]
@@ -191,7 +194,7 @@ export default function BasicSelect({ allPlanes }: { allPlanes: Plane[] }) {
           </Box>
         </Fade>
       </Modal>
-      <form onSubmit={(e) => handleSubmit()}>
+      <form onSubmit={(e) => handleSubmit(e)}>
         <FormControl required={true} fullWidth>
           <InputLabel id="select-plane-id">Plane</InputLabel>
           <Select
@@ -251,6 +254,7 @@ export default function BasicSelect({ allPlanes }: { allPlanes: Plane[] }) {
               fontSize: 12,
               gap: 1,
               marginTop: 1,
+              marginBottom: 2,
             }}
           >
             {arrOfPrices.map((price, idx) => (
@@ -265,7 +269,7 @@ export default function BasicSelect({ allPlanes }: { allPlanes: Plane[] }) {
 
           <Button
             type="submit"
-            className="mt-3 bg-blue-500 hover:bg-blue-900 hover:shadow-[0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)]"
+            className=" bg-blue-500 hover:bg-blue-900 hover:shadow-[0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)]"
             variant="contained"
             endIcon={<SendIcon />}
           >
@@ -284,9 +288,6 @@ const StyledInputRoot = styled("div")(
   border-radius: 8px;
   color: #000;
   height:100%;
-  box-shadow: 0px 2px 2px ${
-    theme.palette.mode === "dark" ? grey[900] : grey[50]
-  };
   display: grid;
   overflow: hidden;
   column-gap: 8px;
@@ -322,6 +323,7 @@ const StyledInputElement = styled("input")(
   border-radius: inherit;
   padding: 8px 12px;
   outline: 0;
+  z-index:5;
 `
 );
 
