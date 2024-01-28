@@ -23,7 +23,6 @@ import {
 } from "@mui/base/Unstable_NumberInput";
 import { handleInsertFlights } from "../serverActions";
 
-
 const priceTags: string[] = [
   "XL Front",
   "Fast Exit",
@@ -31,8 +30,6 @@ const priceTags: string[] = [
   "XL Back",
   "Cheap",
 ];
-
-
 
 function PriceComponent({
   price,
@@ -44,7 +41,6 @@ function PriceComponent({
   price: string;
 }) {
   const [focus, setFocus] = useState(false);
-
 
   const handlePrices = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -85,7 +81,6 @@ function PriceComponent({
         slots={{
           root: StyledInputRoot,
           input: StyledInputElement,
-        
         }}
         slotProps={{ input: { className: "placeholder-opacity-100" } }}
       ></BaseNumberInput>
@@ -130,31 +125,29 @@ export default function BasicSelect({ allPlanes }: { allPlanes: Plane[] }) {
     p: 4,
   };
 
-  const handleChangeInput = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,name:string) => {
-    if(name === "ticket") setTickets(event.target.value);
-    else if (name === "origin")  setOrigin(event.target.value);
-    else if (name === "destination")  setDestination(event.target.value);
+  const handleChangeInput = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    name: string
+  ) => {
+    if (name === "ticket") setTickets(event.target.value);
+    else if (name === "origin") setOrigin(event.target.value);
+    else if (name === "destination") setDestination(event.target.value);
   };
 
-  const handleSubmit = async (e:FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const insertFlight = await handleInsertFlights(
       plane!,
       tickets,
       arrOfPrices,
       origin,
-      destination,
+      destination
     );
-    console.log(insertFlight)
-    if (typeof insertFlight  === "string") {
+    console.log(insertFlight);
+    if (typeof insertFlight === "string") {
       setOpen(true);
-      const err = insertFlight
-        .split("ERROR:")[1]
-        .trim()
-        .split("Caused by:")[0]
-        .trim();
 
-      setErrorMessage(err);
+      setErrorMessage(insertFlight);
       throw new Error(insertFlight);
     }
   };
@@ -215,33 +208,35 @@ export default function BasicSelect({ allPlanes }: { allPlanes: Plane[] }) {
           <TextField
             required
             value={tickets}
-            onChange={e => handleChangeInput(e,"ticket")}
+            onChange={(e) => handleChangeInput(e, "ticket")}
             id="ticket"
             label="Flight Code"
             variant="filled"
           />
 
-          <Box sx={{
-            display:"flex"
-          }}>
-          <TextField
-            required
-            fullWidth
-            value={origin}
-            onChange={e => handleChangeInput(e,"origin")}
-            id="origin"
-            label="Origin"
-            variant="filled"
-          />
-             <TextField
-            required
-            fullWidth
-            value={destination}
-            onChange={e => handleChangeInput(e,"destination")}
-            id="destination"
-            label="Destination"
-            variant="filled"
-          />
+          <Box
+            sx={{
+              display: "flex",
+            }}
+          >
+            <TextField
+              required
+              fullWidth
+              value={origin}
+              onChange={(e) => handleChangeInput(e, "origin")}
+              id="origin"
+              label="Origin"
+              variant="filled"
+            />
+            <TextField
+              required
+              fullWidth
+              value={destination}
+              onChange={(e) => handleChangeInput(e, "destination")}
+              id="destination"
+              label="Destination"
+              variant="filled"
+            />
           </Box>
           <Typography className="text-center" variant="h6" component="h2">
             Set prices

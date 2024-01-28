@@ -1,117 +1,53 @@
-'use client';
+"use client";
 
-import { Button, TextField, Typography } from '@mui/material';
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
-import SendIcon from '@mui/icons-material/Send';
-import { handleFindingConnection } from './serverActions';
-import FlightIcon from '@mui/icons-material/Flight';
-
-import { useAppDispatch, useAppSelector } from '@/store/store';
-import { updateSearch } from '@/store/flightSearch';
-import { useRouter } from 'next/navigation';
+import { Button, TextField } from "@mui/material";
+import { ChangeEvent, FormEvent, useState } from "react";
+import SendIcon from "@mui/icons-material/Send";
+import { useRouter } from "next/navigation";
 
 export default function FindConnection() {
   const router = useRouter();
-	const dispatch = useAppDispatch();
-  const flightSearch = useAppSelector(state => state.flightSearch)
-	const [connections, setConnections] = useState([]);
-	const [origin, setOrigin] = useState(flightSearch.origin);
-	const [destination, setDestination] = useState(flightSearch.destination);
-	const [error, setError] = useState('');
-  const hasRun = useRef(false)
-useEffect(()=>{
- 
-// eslint-disable-next-line
-   if(!hasRun.current && destination && origin){
-    handleSubmit();
-   }
+  const [origin, setOrigin] = useState("");
+  const [destination, setDestination] = useState("");
 
-hasRun.current = true;
-
-//No dependencies
-})
-
-
-	const handleSubmit = async (e?: FormEvent) => {
-		if(e)e.preventDefault();
-		const con = await handleFindingConnection(origin, destination);
-		console.log(con);
-		if (con.rowCount > 0) {
-			setConnections(con.rows);
-			setError('');
-		} else {
-			setConnections(con.rows);
-			setError('No connections found');
-		}
-	};
-
-	const handleClick = (link: string) => {
-		// router.push(link);
-		dispatch(updateSearch({ origin, destination }));
-    router.push(link)
-	};
-	const handleChangeInput = (
-		event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-		name: string
-	) => {
-		if (name === 'origin') setOrigin(event.target.value);
-		else if (name === 'destination') setDestination(event.target.value);
-	};
-	return (
-		<div className=" w-full max-w-4xl ">
-			<form className="grid grid-cols-2" onSubmit={handleSubmit}>
-				<TextField
-					onChange={(e) => handleChangeInput(e, 'origin')}
-					value={origin}
-					id="origin"
-					label="Origin"
-					variant="filled"
-				/>
-				<TextField
-					onChange={(e) => handleChangeInput(e, 'destination')}
-					value={destination}
-					id="destination"
-					label="Destination"
-					variant="filled"
-				/>
-				<Button
-					type="submit"
-					className="col-span-2 mt-3 bg-blue-500 hover:bg-blue-900 hover:shadow-[0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)]"
-					variant="contained"
-					endIcon={<SendIcon />}
-				>
-					Search
-				</Button>
-			</form>
-
-			<Typography mt={3} fontSize={25} align="center" color={'#f00'}>
-				{error}
-			</Typography>
-			{connections.length > 0 &&
-				connections.map((connection: any) => (
-					<div
-						className=" cursor-pointer relative mt-4 flex w-full justify-between items-center bg-gray-300 min-h-[62px] rounded-md"
-						key={connection.id}
-						onClick={(e) => handleClick(connection.tickets_name)}
-					>
-						<Typography className="absolute left-4 text-xs md:text-base">
-							{connection.tickets_name}
-						</Typography>
-						<Typography className=" whitespace-pre flex-grow flex items-center justify-center text-xs md:text-base">
-							{' '}
-							{connection.origin}{' '}
-							<FlightIcon
-								sx={{
-									rotate: '90deg',
-								}}
-							/>
-							{' ' + connection.destination}
-						</Typography>
-						<Typography className="absolute right-4 text-xs md:text-base">
-							{connection.prices[4]}zł
-						</Typography>
-					</div>
-				))}
-		</div>
-	);
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    // router.push(link);
+    router.push(`/flights/search?origin=${origin}&destination=${destination}`);
+  };
+  const handleChangeInput = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    name: string
+  ) => {
+    if (name === "origin") setOrigin(event.target.value);
+    else if (name === "destination") setDestination(event.target.value);
+  };
+  return (
+    <div className=" w-full max-w-4xl ">
+      <form className="grid grid-cols-2" onSubmit={handleSubmit}>
+        <TextField
+          onChange={(e) => handleChangeInput(e, "origin")}
+          value={origin}
+          id="origin"
+          label="Origin"
+          variant="filled"
+        />
+        <TextField
+          onChange={(e) => handleChangeInput(e, "destination")}
+          value={destination}
+          id="destination"
+          label="Destination"
+          variant="filled"
+        />
+        <Button
+          type="submit"
+          className="col-span-2 mt-3 bg-blue-500 hover:bg-blue-900 hover:shadow-[0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)]"
+          variant="contained"
+          endIcon={<SendIcon />}
+        >
+          Search
+        </Button>
+      </form>
+    </div>
+  );
 }
