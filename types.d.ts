@@ -31,3 +31,9 @@ type Flight = {
   origin: string;
   destination: string;
 };
+type Airport = {
+  airportcode:string;
+  airportname:string;
+  country:string;
+  
+}
