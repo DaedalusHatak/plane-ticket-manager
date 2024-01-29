@@ -1,7 +1,7 @@
 'use client';
 
-import { Button, TextField, Typography } from '@mui/material';
-import { ChangeEvent, FormEvent,MouseEvent,useEffect,useRef,useState } from 'react';
+import { Button, TextField} from '@mui/material';
+import { ChangeEvent, FormEvent,useRef,useState } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 
 
@@ -13,6 +13,10 @@ import ShowList from './showList';
 export default function FindConnection({airports}:{airports:Airport[]}) {
 	const destinationRef = useRef<HTMLInputElement>(null);
 	const originRef = useRef<HTMLInputElement>(null);
+
+	const [originLabel, setOriginLabel] = useState('Origin');
+	const [destinationLabel, setDestinationLabel] = useState('Destination');
+
   const router = useRouter();
 	const [origin, setOrigin] = useState("");
 	const [showList, setShowList] = useState("")
@@ -23,36 +27,54 @@ export default function FindConnection({airports}:{airports:Airport[]}) {
 	const handleSubmit = async (e: FormEvent) => {
 	e.preventDefault();
 	if(origin && destination){
+
 		const checkOrigin = airports.filter((airport:Airport) =>
 		airport.airportname.toLowerCase() === origin.toLowerCase());
 	  const checkDestination = airports.filter((airport:Airport) =>
 		airport.airportname.toLowerCase() === destination.toLowerCase());
-	  console.log(checkDestination)
-	  console.log(checkOrigin)
+
 		if(checkOrigin.length === 1 && checkDestination.length === 1){
 			router.push(`/flights/search?origin=${origin}&destination=${destination}`)
 		}
+		else{
+setError("Please select airports")
+if(checkDestination.length !== 1 && destinationRef.current){
+	setDestination("")
+	setDestinationLabel("Please select arrival airport")
+}
+else if(checkOrigin.length !== 1 && originRef.current){
+	setOrigin("")
+	setOriginLabel("Please select departure airport")
+		}
 	}
 
-	};
+	};}
 	
 
 	const handleChangeInput = (
 		event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 	) => {
-		if (event.target.id === 'origin') setOrigin(event.target.value);
-		else if (event.target.id === 'destination') setDestination(event.target.value);
+		if (event.target.id === 'origin') {
+			setOrigin(event.target.value);
+			setOriginLabel("Origin")
+		}
+		else if (event.target.id === 'destination') {
+			setDestination(event.target.value);
+			setDestinationLabel("Destination")}
 		setFilterCountries(event.target.value)
 	};
 
 	const handleClick = (e:any,set?:string) =>{
-		console.log(set)
+
 		if(set){
 			if (showList === 'origin') {
 				setOrigin(set);
-				setShowList("destination")
+				if(!destination){
+					setShowList("destination")
+					if(destinationRef.current){ destinationRef.current.focus();}
+				}
 
-				if(destinationRef.current){ destinationRef.current.focus();}
+				
 				setFilterCountries("")
 				return;
 			}
@@ -81,9 +103,7 @@ setShowList(e.target.id)
 
 	return (
 		<div className=" w-full max-w-4xl ">
-			{origin} = {destination}
-
-			{error}
+				{error && <p className='text-center text-xl text-red-500'>{error}</p> }
 			<form className="grid grid-cols-2" onSubmit={handleSubmit}>
 				<TextField
 					onChange={(e) => handleChangeInput(e)}
@@ -91,7 +111,7 @@ setShowList(e.target.id)
 					value={origin}
 					inputRef={originRef}
 					id="origin"
-					label="Origin"
+					label={originLabel}
 					variant="filled"
 				/>
 				<TextField
@@ -100,7 +120,7 @@ setShowList(e.target.id)
 					value={destination}
 					inputRef={destinationRef}
 					id="destination"
-					label="Destination"
+					label={destinationLabel}
 					variant="filled"
 				/>
 				<Button
@@ -111,6 +131,7 @@ setShowList(e.target.id)
 				>
 					Search
 				</Button>
+				
 			</form>
 			{showList &&  <ShowList  setFilterCountries={setFilterCountries} filterCountries={filterCountries}  airports={airports} onClick={handleClick}/>}
 		
