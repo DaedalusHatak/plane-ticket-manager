@@ -58,7 +58,17 @@ body {
 
 }
 
+.bg-airport{
+  
+  background-image:  url("/loginBg.avif");
+  background-repeat: no-repeat;
+  background-clip: border-box;
+  background-position: center center;
+  background-size: cover;
+  background-blend-mode: overlay;
+  background-color: rgba(0,0,0,0.7);
 
+}
 
 .text-stroke-white{
   mix-blend-mode: difference;
