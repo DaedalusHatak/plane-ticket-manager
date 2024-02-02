@@ -123,7 +123,7 @@ export default function BasicSelect({
 	const [arrOfPrices, setArrOfPrices] = useState(Array(5).fill(0));
 	const [tickets, setTickets] = useState<string>('');
 	const [origin, setOrigin] = useState<string>('');
-	const [showList, setShowList] = useState<string>('');
+	const [showList, setShowList] = useState<boolean>(false);
 	const [destination, setDestination] = useState<string>('');
 	const [open, setOpen] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<string>('');
@@ -154,19 +154,20 @@ export default function BasicSelect({
 	};
 
 	const handleTargetChange = (e:any,newTarget:any) =>{
-setCurrentTarget(newTarget);
+		setShowList(true)
 		handleAirportList(e)
 	}
+
+
 	const handleAirportList = (e: any, setTarget?: any) => {
-		console.log(currentTarget)
+		console.log(setTarget)
 	
 		if (setTarget) {
-			if (showList === 'origin') {
+			if (currentTarget === 'origin') {
 				setOrigin(setTarget);
-				setShowList('destination');
 
         if (!destination) {
-					setShowList('destination');
+					setCurrentTarget('destination');
 					if (destinationRef.current) {
 						destinationRef.current.focus();
 					}
@@ -174,10 +175,12 @@ setCurrentTarget(newTarget);
           return;
 				}
 				
-			} else if (showList === 'destination') {
+			} 
+			
+			else if (currentTarget === 'destination') {
 				setDestination(setTarget);
 				if (!origin) {
-					setShowList('origin');
+					setCurrentTarget('origin');
 					if (originRef.current) {
 						originRef.current.focus();
 					}
@@ -188,8 +191,10 @@ setCurrentTarget(newTarget);
 				
 			}
 		}
-    setFilterCountries('');
-		setShowList(e.target.id);
+
+
+    	setFilterCountries('');
+		setCurrentTarget(e.target.name);
 	};
 
 	const handleChangeInput = (
@@ -329,6 +334,7 @@ setCurrentTarget(newTarget);
 						
 							onFocus={(e) => handleTargetChange(e,"origin")}
 							id="origin"
+							name="origin"
 							label="Origin"
 							variant="filled"
 						/>
@@ -341,6 +347,7 @@ setCurrentTarget(newTarget);
 							onChange={(e) => handleChangeInput(e)}
 							onFocus={(e) => handleTargetChange(e,"destination")}
 							id="destination"
+							name="destination"
 							label="Destination"
 							variant="filled"
 						/>
@@ -352,7 +359,7 @@ setCurrentTarget(newTarget);
 						className=" bg-blue-500 hover:bg-blue-900 hover:shadow-[0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)]"
 						variant="contained"
 						tabIndex={3}
-						onClick={e => setShowList('')}
+						onClick={e => setShowList(false)}
 						endIcon={<SendIcon />}
 					>
 						Send

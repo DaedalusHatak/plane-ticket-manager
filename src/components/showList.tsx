@@ -46,7 +46,7 @@ const setAll = (e:any) => {
 	</ul>
 	<div className='flex flex-col gap-1 py-4 px-2'>
 		{arrOfAirports.map(airport => (
-			<div key={airport.airportcode} onClick={(e)=> onClick(e,e.target.id,airport.airportname)} tabIndex={0}   className={`px-2 index  w-min cursor-pointer ${filterCountries  && airport.airportname.toLowerCase().includes(filterCountries.toLowerCase()) ? 'bg-green-500 px-2' : ''} rounded-xl p-1`}>
+			<div key={airport.airportcode} onClick={(e)=> onClick(e,airport.airportname)} tabIndex={0}   className={`px-2 index  w-min cursor-pointer ${filterCountries  && airport.airportname.toLowerCase().includes(filterCountries.toLowerCase()) ? 'bg-green-500 px-2' : ''} rounded-xl p-1`}>
 			{airport.airportname}
 			</div>
 		))}
