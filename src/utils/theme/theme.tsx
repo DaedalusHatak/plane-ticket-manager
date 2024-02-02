@@ -19,25 +19,7 @@ declare module '@mui/material/styles' {
     }
   }
 export const theme = createTheme({
-components:{
-    MuiTextField:{
-        styleOverrides:{
-            root:{
-                '& .MuiOutlinedInput-root': {
-                    '& fieldset': {
-                      borderColor: 'white',
-                    },
-                    '&:hover fieldset': {
-                        borderColor: 'white',
-                        borderWidth: '0.15rem',
-                      },  
-                },
-                    
-                }
-                   
-        }
-    }
-},
+
   palette: {
     white:{main:"#fff"},
     primary: {

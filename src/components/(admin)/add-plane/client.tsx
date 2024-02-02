@@ -127,7 +127,7 @@ export default function BasicSelect({
 	const [destination, setDestination] = useState<string>('');
 	const [open, setOpen] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<string>('');
-
+	const [currentTarget,setCurrentTarget] = useState('')
 
 //Custom variables	
 	const style = {
@@ -153,11 +153,16 @@ export default function BasicSelect({
 		setPlane(selectedPlane);
 	};
 
-
-	const handleAirportList = (e: any, set?: any) => {
-		if (set) {
+	const handleTargetChange = (e:any,newTarget:any) =>{
+setCurrentTarget(newTarget);
+		handleAirportList(e)
+	}
+	const handleAirportList = (e: any, setTarget?: any) => {
+		console.log(currentTarget)
+	
+		if (setTarget) {
 			if (showList === 'origin') {
-				setOrigin(set);
+				setOrigin(setTarget);
 				setShowList('destination');
 
         if (!destination) {
@@ -170,7 +175,7 @@ export default function BasicSelect({
 				}
 				
 			} else if (showList === 'destination') {
-				setDestination(set);
+				setDestination(setTarget);
 				if (!origin) {
 					setShowList('origin');
 					if (originRef.current) {
@@ -208,7 +213,6 @@ export default function BasicSelect({
 			origin,
 			destination
 		);
-		console.log(insertFlight);
 		if (typeof insertFlight === 'string') {
 			setOpen(true);
 
@@ -322,8 +326,8 @@ export default function BasicSelect({
 							inputRef={originRef}
 							value={origin}
 							onChange={(e) => handleChangeInput(e)}
-							onClick={(e) => handleAirportList(e)}
-							onFocus={(e) => handleAirportList(e)}
+						
+							onFocus={(e) => handleTargetChange(e,"origin")}
 							id="origin"
 							label="Origin"
 							variant="filled"
@@ -335,8 +339,7 @@ export default function BasicSelect({
 							value={destination}
 							tabIndex={2}
 							onChange={(e) => handleChangeInput(e)}
-							onClick={(e) => handleAirportList(e)}
-							onFocus={(e) => handleAirportList(e)}
+							onFocus={(e) => handleTargetChange(e,"destination")}
 							id="destination"
 							label="Destination"
 							variant="filled"
@@ -349,7 +352,7 @@ export default function BasicSelect({
 						className=" bg-blue-500 hover:bg-blue-900 hover:shadow-[0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)]"
 						variant="contained"
 						tabIndex={3}
-						onFocus={e => setShowList('')}
+						onClick={e => setShowList('')}
 						endIcon={<SendIcon />}
 					>
 						Send

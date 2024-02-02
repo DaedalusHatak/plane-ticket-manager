@@ -1,42 +1,31 @@
 "use client";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { login } from "./serverActions";
-import { Box, Button, CircularProgress, InputLabel, TextField } from "@mui/material";
+import { Box, Button, CircularProgress, InputLabel, TextField,FormControl,OutlinedInput, InputAdornment, IconButton } from "@mui/material";
 import { useEffect, useState } from "react";
-import { nextTick } from "process";
-import { useFormStatus } from "react-dom";
-import { red } from "@mui/material/colors";
-import { theme } from "@/src/utils/theme/theme";
 
+import { useFormStatus } from "react-dom";
+
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { LoginOutlinedInput, LoginTextField } from "@/src/components/muiStyled/textField";
 
 export default function Form() {
-  const { pending } = useFormStatus();
-  const handleSubmit = async (formData: FormData) => {
-    try {
-      const info = await login(formData);
-      console.log(info);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      // setLoading(false)
-    }
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
   };
+  const { pending } = useFormStatus();
 
 
-  const styles = (theme:any) => ({
-  
-    notchedOutline: {
-      borderWidth: '1px',
-      borderColor: 'green !important'
-    },
-  
-  });
   
 
   return (
     <>
 
-    <TextField
+    <LoginTextField
         id="email"
         name="email"
         type="email"
@@ -46,17 +35,28 @@ export default function Form() {
         variant="outlined"
         required
       />
-      <TextField
-        id="password"
-        name="password"
-        type="password"
-        label="Password"
-        InputLabelProps={{style:{color:"white",borderColor:"white"}}}
-        color="secondary"
-        variant="outlined"
-        required
-      />
-      <Button type="submit" formAction={handleSubmit} sx={{height:60}} variant="contained">
+      <FormControl>
+        <InputLabel style={{color:"white"}} >Password</InputLabel>
+        <LoginOutlinedInput  type={showPassword ? 'text' : 'password'}
+        inputProps={{style:{color:"white",borderColor:"white"}}}
+    color="secondary"
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            id="password"
+            label="Password"
+            name="password"/>
+      </FormControl>
+      <Button type="submit"  sx={{height:60}} variant="contained">
         {pending ? <CircularProgress color="secondary" /> : "Log in"}
       </Button>
      

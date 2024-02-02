@@ -24,6 +24,13 @@ body {
   background-color: #f4f4f4;
  
 }
+input:-webkit-autofill {
+  -webkit-text-size-adjust: auto;
+  -webkit-text-fill-color: #fff;
+  box-shadow: inset transparent 0 0 0 1000px;
+  -webkit-background-clip: text;
+}
+
 .border-plane{
   border-top-right-radius: 8rem 20rem;
   border-top-left-radius: 8rem 20rem;
