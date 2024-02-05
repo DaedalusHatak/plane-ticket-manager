@@ -27,7 +27,7 @@ setArrOfAirports(results);
    
 const setAll = (e:any) => {
 	setFilterCountries("all-flights")
-	onClick(e,e.target.id,"all-flights")
+	onClick(e,"all-flights")
 }
    return (
     <div  className='w-full  mt-4 grid grid-cols-[50%,50%] sm:grid-cols-[70%,30%] bg-red-600'>

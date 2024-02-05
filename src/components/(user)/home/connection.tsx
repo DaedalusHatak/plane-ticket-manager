@@ -1,7 +1,7 @@
 'use client';
 
 import { Button, TextField } from '@mui/material';
-import { ChangeEvent, FormEvent, useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 
 import { useRouter } from 'next/navigation';
@@ -10,151 +10,149 @@ import ShowList from '../../showList';
 export default function FindConnection({ airports }: { airports: Airport[] }) {
 	const destinationRef = useRef<HTMLInputElement>(null);
 	const originRef = useRef<HTMLInputElement>(null);
+	const containerRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		document.addEventListener('mousedown', handleClickOutside);
+
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+		};
+	}, []);
 
 	const [originLabel, setOriginLabel] = useState('Origin');
 	const [destinationLabel, setDestinationLabel] = useState('Destination');
-
 	const router = useRouter();
 	const [origin, setOrigin] = useState('');
-	const [showList, setShowList] = useState('');
+	const [showList, setShowList] = useState(false);
 	const [destination, setDestination] = useState('');
 	const [error, setError] = useState('');
 	const [filterCountries, setFilterCountries] = useState<string>('');
+	const [currentTarget, setCurrentTarget] = useState('');
+
+	const handleClickOutside = (e: any) => {
+		if (containerRef.current && !containerRef.current.contains(e.target)) {
+			setShowList(false);
+		}
+	};
+
+	const handleTargetChange = (e: any, newTarget: any) => {
+		setShowList(true);
+		setCurrentTarget(newTarget);
+		setFilterCountries(e.target.value);
+	};
 
 	const handleSubmit = async (e: FormEvent) => {
 		let isError = false;
 		e.preventDefault();
+		if (!origin && !destination) return;
 
-		if (origin && destination) {
+		const checkOrigin =
+			origin === 'All airports'
+				? airports
+				: airports.filter(
+						(airport: Airport) =>
+							airport.airportname.toLowerCase() === origin.toLowerCase()
+				  );
+		const checkDestination =
+			destination === 'All airports'
+				? airports
+				: airports.filter(
+						(airport: Airport) =>
+							airport.airportname.toLowerCase() === destination.toLowerCase()
+				  );
 
-			const checkOrigin = origin === "All airports" ? airports : airports.filter(
-				(airport: Airport) =>
-					airport.airportname.toLowerCase() === origin.toLowerCase()
+		if (origin !== 'All airports' && checkOrigin.length !== 1) {
+			console.log('err');
+			setError('Please select airports');
+			setOrigin('');
+			setOriginLabel('Please select arrival airport');
+			isError = true;
+		}
+
+		if (destination !== 'All airports' && checkDestination.length !== 1) {
+			setError('Please select airports');
+			setDestination('');
+			setDestinationLabel('Please select departure airport');
+			isError = true;
+		}
+
+		if (!isError) {
+			router.push(
+				`/flights/search?origin=${
+					origin === 'All airports' ? 'all-flights' : origin
+				}&destination=${
+					destination === 'All airports' ? 'all-flights' : destination
+				}`
 			);
-			const checkDestination = destination === "All airports" ? airports : airports.filter(
-				(airport: Airport) =>
-					airport.airportname.toLowerCase() === destination.toLowerCase()
-			);
+		}
+	};
 
-
-			if (origin !== 'All airports' && checkOrigin.length !== 1) {
-				console.log('err')
-				setError('Please select airports');
-				setOrigin('');
-				setOriginLabel('Please select arrival airport');
-				isError = true;
+	const handleAirportList = (e: any, setTarget: any) => {
+		console.log(setTarget)
+		if(setTarget === 'all-flights'){
+			currentTarget === 'origin' ? setOrigin("All airports") : setDestination("All airports")
+		return;
+		}
+		if (currentTarget === 'origin') {
+			setOrigin(setTarget);
+			setFilterCountries(setTarget);
+			if (!destination) {
+				setCurrentTarget('destination');
+				if (destinationRef.current) {
+					destinationRef.current.focus();
+				}
+				setFilterCountries('');
+				return;
 			}
-			
-			if (destination !== 'All airports' && checkDestination.length !== 1) {	
-				setError('Please select airports');
-				setDestination('');
-				setDestinationLabel('Please select departure airport');
-				isError = true;
-			} 
-			
-	if(!isError){
-		router.push(
-			`/flights/search?origin=${origin === 'All airports' ? 'all-flights' : origin}&destination=${destination === 'All airports' ? 'all-flights' : destination}`
-		);
-	}
-	
+		} else {
+			setDestination(setTarget);
+			setFilterCountries(setTarget);
+			if (!origin) {
+				setCurrentTarget('origin');
+				if (originRef.current) {
+					originRef.current.focus();
+				}
+
+				setFilterCountries('');
+				return;
+			}
 		}
 	};
 
 	const handleChangeInput = (
 		event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
 	) => {
-		if (event.target.id === 'origin') {
-			setOrigin(event.target.value);
-			setOriginLabel('Origin');
-		} else if (event.target.id === 'destination') {
+		if (event.target.name === 'origin') setOrigin(event.target.value);
+		else if (event.target.name === 'destination')
 			setDestination(event.target.value);
-			setDestinationLabel('Destination');
-		}
+
 		setFilterCountries(event.target.value);
 	};
 
-	const handleClick = (e: any, set?: string) => {
-		setError("")
-		setShowList(e.target.id);
-		if (set === 'all-flights') {
-			if (showList === 'origin') {
-				setOrigin('All airports');
-				if (!destination) {
-					setShowList('destination');
-					if (destinationRef.current) {
-						destinationRef.current.focus();
-					}
-					setFilterCountries('');
-				}
-				return;
-			}
-			if (showList === 'destination') {
-				setDestination('All airports');
-				if (!origin) {
-					setShowList('origin');
-					if (originRef.current) {
-						originRef.current.focus();
-					}
-				}
-				setFilterCountries('');
-			}
-			return;
-		} else if (set) {
-			if (showList === 'origin') {
-				setOrigin(set);
-				if (!destination) {
-					setShowList('destination');
-					if (destinationRef.current) {
-						destinationRef.current.focus();
-					}
-				}
-
-				setFilterCountries('');
-				return;
-			} else if (showList === 'destination') {
-				setDestination(set);
-				if (!origin) {
-					setShowList('origin');
-					if (originRef.current) {
-						originRef.current.focus();
-					}
-				}
-				setFilterCountries('');
-				return;
-			}
-		} else {
-			if (e.target.id === 'origin') {
-				setOriginLabel('Origin');
-				setFilterCountries(origin);
-			} else if (e.target.id === 'destination') {
-				setDestinationLabel('Destination');
-				setFilterCountries(destination);
-			}
-		}
-	};
-
 	return (
-		<div className=" w-full max-w-4xl ">
+		<div className=" w-full max-w-4xl " ref={containerRef}>
 			{error && <p className="text-center text-xl text-red-500">{error}</p>}
 			<form className="grid grid-cols-2" onSubmit={handleSubmit}>
 				<TextField
 					onChange={(e) => handleChangeInput(e)}
-					onClick={(e) => handleClick(e)}
-					onFocus={(e) => handleClick(e)}
+					onFocus={(e) => handleTargetChange(e, 'origin')}
+					autoComplete='off'
 					value={origin}
 					inputRef={originRef}
 					id="origin"
+					name="origin"
 					label={originLabel}
 					variant="filled"
 				/>
 				<TextField
 					onChange={(e) => handleChangeInput(e)}
-					onClick={(e) => handleClick(e)}
-					onFocus={(e) => handleClick(e)}
+					onFocus={(e) => handleTargetChange(e, 'destination')}
+					autoComplete='off'
 					value={destination}
 					inputRef={destinationRef}
 					id="destination"
+					name="destination"
 					label={destinationLabel}
 					variant="filled"
 				/>
@@ -173,7 +171,7 @@ export default function FindConnection({ airports }: { airports: Airport[] }) {
 					setFilterCountries={setFilterCountries}
 					filterCountries={filterCountries}
 					airports={airports}
-					onClick={handleClick}
+					onClick={handleAirportList}
 				/>
 			)}
 		</div>

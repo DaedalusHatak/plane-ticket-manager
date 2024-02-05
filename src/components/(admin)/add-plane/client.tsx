@@ -23,6 +23,7 @@ import {
 } from '@mui/base/Unstable_NumberInput';
 import ShowList from '../../showList';
 import { handleInsertFlights } from '@/src/server-actions/sql/serverActions';
+import ShowListDiv from '../../showListDiv';
 
 const priceTags: string[] = [
 	'XL Front',
@@ -118,16 +119,13 @@ export default function BasicSelect({
 	const originRef = useRef<HTMLInputElement>(null);
 
 //States
-	const [filterCountries, setFilterCountries] = useState<string>('');
+
 	const [plane, setPlane] = useState<Plane | null>();
 	const [arrOfPrices, setArrOfPrices] = useState(Array(5).fill(0));
 	const [tickets, setTickets] = useState<string>('');
-	const [origin, setOrigin] = useState<string>('');
-	const [showList, setShowList] = useState<boolean>(false);
-	const [destination, setDestination] = useState<string>('');
 	const [open, setOpen] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<string>('');
-	const [currentTarget,setCurrentTarget] = useState('')
+
 
 //Custom variables	
 	const style = {
@@ -152,72 +150,25 @@ export default function BasicSelect({
 		const selectedPlane = allPlanes.find((e) => e.name === event.target.value);
 		setPlane(selectedPlane);
 	};
-
-	const handleTargetChange = (e:any,newTarget:any) =>{
-		setShowList(true)
-		handleAirportList(e)
-	}
-
-
-	const handleAirportList = (e: any, setTarget?: any) => {
-		console.log(setTarget)
-	
-		if (setTarget) {
-			if (currentTarget === 'origin') {
-				setOrigin(setTarget);
-
-        if (!destination) {
-					setCurrentTarget('destination');
-					if (destinationRef.current) {
-						destinationRef.current.focus();
-					}
-          setFilterCountries('');
-          return;
-				}
-				
-			} 
-			
-			else if (currentTarget === 'destination') {
-				setDestination(setTarget);
-				if (!origin) {
-					setCurrentTarget('origin');
-					if (originRef.current) {
-						originRef.current.focus();
-					}
-          setFilterCountries('');
-          return;
-				}
-				
-				
-			}
-		}
-
-
-    	setFilterCountries('');
-		setCurrentTarget(e.target.name);
-	};
-
 	const handleChangeInput = (
 		event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
 	) => {
-		if (event.target.id === 'ticket') setTickets(event.target.value);
-		else {
-			if (event.target.id === 'origin') setOrigin(event.target.value);
-			else if (event.target.id === 'destination') 	setDestination(event.target.value);
-
-        setFilterCountries(event.target.value)
-		}
+	 setTickets(event.target.value);
+	
 	};
 
-	const handleSubmit = async (e: FormEvent) => {
+	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		const formData = new FormData(e.currentTarget)
+formData.get("origin")
 		const insertFlight = await handleInsertFlights(
 			plane!,
 			tickets,
 			arrOfPrices,
-			origin,
-			destination
+			formData.get("origin"),
+			formData.get("destination"),
 		);
+		console.log(insertFlight)
 		if (typeof insertFlight === 'string') {
 			setOpen(true);
 
@@ -226,9 +177,6 @@ export default function BasicSelect({
 		}
 
 		setArrOfPrices(Array(5).fill(0))
-		setTickets("")
-		setDestination("")
-		setOrigin("")
 		setPlane(null);
 
 	};
@@ -320,7 +268,8 @@ export default function BasicSelect({
 							></PriceComponent>
 						))}
 					</Box>
-					<Box
+					<ShowListDiv airports={airports}></ShowListDiv>
+					{/* <Box
 						sx={{
 							display: 'flex',
 						}}
@@ -331,7 +280,7 @@ export default function BasicSelect({
 							inputRef={originRef}
 							value={origin}
 							onChange={(e) => handleChangeInput(e)}
-						
+							autoComplete='off'
 							onFocus={(e) => handleTargetChange(e,"origin")}
 							id="origin"
 							name="origin"
@@ -344,6 +293,7 @@ export default function BasicSelect({
 							inputRef={destinationRef}
 							value={destination}
 							tabIndex={2}
+							autoComplete='off'
 							onChange={(e) => handleChangeInput(e)}
 							onFocus={(e) => handleTargetChange(e,"destination")}
 							id="destination"
@@ -363,7 +313,7 @@ export default function BasicSelect({
 						endIcon={<SendIcon />}
 					>
 						Send
-					</Button>
+					</Button> */}
 				</FormControl>
 			</form>
 		</Box>
