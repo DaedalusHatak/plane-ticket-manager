@@ -115,8 +115,6 @@ export default function BasicSelect({
 	allPlanes: Plane[];
 }) {
 //Refs
-	const destinationRef = useRef<HTMLInputElement>(null);
-	const originRef = useRef<HTMLInputElement>(null);
 
 //States
 
@@ -125,7 +123,7 @@ export default function BasicSelect({
 	const [tickets, setTickets] = useState<string>('');
 	const [open, setOpen] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<string>('');
-
+	const [error, setError] = useState('');
 
 //Custom variables	
 	const style = {
@@ -157,29 +155,58 @@ export default function BasicSelect({
 	
 	};
 
-	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		const formData = new FormData(e.currentTarget)
-formData.get("origin")
-		const insertFlight = await handleInsertFlights(
-			plane!,
-			tickets,
-			arrOfPrices,
-			formData.get("origin"),
-			formData.get("destination"),
-		);
-		console.log(insertFlight)
-		if (typeof insertFlight === 'string') {
-			setOpen(true);
+	const handleSubmit = async (origin:string,destination:string) => {
+		let isError = {origin:false,destination:false};
+		if (!origin && !destination) return {origin:true,destination:true};
 
-			setErrorMessage(insertFlight);
-			throw new Error(insertFlight);
+		const checkOrigin =
+			origin === 'All airports'
+				? airports
+				: airports.filter(
+						(airport: Airport) =>
+							airport.airportname.toLowerCase() === origin.toLowerCase()
+				  );
+		const checkDestination =
+			destination === 'All airports'
+				? airports
+				: airports.filter(
+						(airport: Airport) =>
+							airport.airportname.toLowerCase() === destination.toLowerCase()
+				  );
+
+		if (origin !== 'All airports' && checkOrigin.length !== 1) {
+			setError('Please select airports');
+			isError.origin = true;
 		}
 
-		setArrOfPrices(Array(5).fill(0))
-		setPlane(null);
+		if (destination !== 'All airports' && checkDestination.length !== 1) {
+			setError('Please select airports');
+			isError.destination = true;
+		}
+		if(isError.origin || isError.destination) return isError;
+		else  {
+			const insertFlight = await handleInsertFlights(
+				plane!,
+				tickets,
+				arrOfPrices,
+				origin,
+				destination
+			);
+	
+			if (typeof insertFlight === 'string') {
+				setOpen(true);
+	
+				setErrorMessage(insertFlight);
+				throw new Error(insertFlight);
+			}
+	
+			setArrOfPrices(Array(5).fill(0))
+			setPlane(null);
+		}
+		}
+	
 
-	};
+
 
 
 //HTML
@@ -218,7 +245,7 @@ formData.get("origin")
 					</Box>
 				</Fade>
 			</Modal>
-			<form onSubmit={(e) => handleSubmit(e)}>
+			<form onSubmit={(e) => e.preventDefault()}>
 				<FormControl required={true} fullWidth>
 					<InputLabel id="select-plane-id">Plane</InputLabel>
 					<Select
@@ -269,51 +296,7 @@ formData.get("origin")
 						))}
 					</Box>
 					<ShowListDiv airports={airports}></ShowListDiv>
-					{/* <Box
-						sx={{
-							display: 'flex',
-						}}
-					>
-						<TextField
-							required
-							fullWidth
-							inputRef={originRef}
-							value={origin}
-							onChange={(e) => handleChangeInput(e)}
-							autoComplete='off'
-							onFocus={(e) => handleTargetChange(e,"origin")}
-							id="origin"
-							name="origin"
-							label="Origin"
-							variant="filled"
-						/>
-						<TextField
-							required
-							fullWidth
-							inputRef={destinationRef}
-							value={destination}
-							tabIndex={2}
-							autoComplete='off'
-							onChange={(e) => handleChangeInput(e)}
-							onFocus={(e) => handleTargetChange(e,"destination")}
-							id="destination"
-							name="destination"
-							label="Destination"
-							variant="filled"
-						/>
-					</Box>
-					{showList &&  <ShowList setFilterCountries={setFilterCountries} filterCountries={filterCountries}  airports={airports} onClick={handleAirportList}/>}
-
-					<Button
-						type="submit"
-						className=" bg-blue-500 hover:bg-blue-900 hover:shadow-[0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)]"
-						variant="contained"
-						tabIndex={3}
-						onClick={e => setShowList(false)}
-						endIcon={<SendIcon />}
-					>
-						Send
-					</Button> */}
+					
 				</FormControl>
 			</form>
 		</Box>

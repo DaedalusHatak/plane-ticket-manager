@@ -30,9 +30,9 @@ const setAll = (e:any) => {
 	onClick(e,"all-flights")
 }
    return (
-    <div  className='w-full  mt-4 grid grid-cols-[50%,50%] sm:grid-cols-[70%,30%] bg-red-600'>
+    <div  className='w-full  max-h-[540px] mt-4 grid grid-cols-[50%,50%] sm:grid-cols-[70%,30%] rounded-[3px] bg-slate-300'>
 	
-	<ul className={`relative ${allAirports ? 'pt-12' : 'pt-1'} columns-1 sm:columns-2 md:columns-3 lg:columns-4 py-4 px-2 border-r-2 `}>
+	<ul className={`relative ${allAirports ? 'pt-12' : 'pt-1'} max-h-[540px] grid overflow-y-scroll grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-4 px-2 `}>
 {allAirports && 	<div onClick={e=> setAll(e)}  tabIndex={0}  className={`px-2  absolute left-1/2 top-1 -translate-x-1/2 w-min cursor-pointer ${filterCountries === 'all-flights' ? 'bg-green-500 px-2' : ''} rounded-xl p-1`}>
 		All
 		</div>}
@@ -44,7 +44,7 @@ const setAll = (e:any) => {
 		</div>
 	))}
 	</ul>
-	<div className='flex flex-col gap-1 py-4 px-2'>
+	<div className='flex overflow-y-scroll max-h-[540px] flex-col gap-1 py-4 px-2'>
 		{arrOfAirports.map(airport => (
 			<div key={airport.airportcode} onClick={(e)=> onClick(e,airport.airportname)} tabIndex={0}   className={`px-2 index  w-min cursor-pointer ${filterCountries  && airport.airportname.toLowerCase().includes(filterCountries.toLowerCase()) ? 'bg-green-500 px-2' : ''} rounded-xl p-1`}>
 			{airport.airportname}

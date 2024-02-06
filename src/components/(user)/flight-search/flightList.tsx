@@ -20,7 +20,7 @@ export default function FlightList({
       <h1 className="text-xl w-full bg-red-200 py-7 px-[5%]">
         All results for: {" "}
         <span className="font-bold">
-          {query.origin} - {query.destination==="all-flights" ? 'All airports' : query.destination}
+        {query.origin==="all-flights" ? 'All airports' : query.origin} - {query.destination==="all-flights" ? 'All airports' : query.destination}
         </span>
       </h1>
       <div className=" bg-green-400 w-full flex-grow h-full py-5 px-[5%]">
