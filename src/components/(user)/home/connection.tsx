@@ -5,7 +5,7 @@ import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 
 import { useRouter } from 'next/navigation';
-import ShowListDiv from '../../showListDiv';
+import ShowListDiv from '../../(global)/showListDiv';
 
 export default function FindConnection({ airports }: { airports: Airport[] }) {
 
@@ -60,7 +60,7 @@ export default function FindConnection({ airports }: { airports: Airport[] }) {
 	
 
 	return (
-		<div className=" w-full max-w-6xl " >
+		<div className=" w-full max-w-5xl " >
 			{error && <p className="text-center text-xl text-red-500">{error}</p>}
 			<form className="flex" onSubmit={e=>e.preventDefault()}>
 			<ShowListDiv showAll={true} onSubmit={handleParentSubmit} airports={airports}></ShowListDiv>

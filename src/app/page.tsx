@@ -1,7 +1,7 @@
 import { sql } from "@vercel/postgres";
 import { unstable_noStore as noStore } from "next/cache";
 import FindConnection from "../components/(user)/home/connection";
-import Modal from "../components/modal";
+import Modal from "../components/(global)/modal";
 export default async function Home() {
   noStore();
   const { rows: airports } = await sql`SELECT * from airports`;

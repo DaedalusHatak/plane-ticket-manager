@@ -21,9 +21,9 @@ import {
 	Unstable_NumberInput as BaseNumberInput,
 	numberInputClasses,
 } from '@mui/base/Unstable_NumberInput';
-import ShowList from '../../showList';
+import ShowList from '../../(global)/showList';
 import { handleInsertFlights } from '@/src/server-actions/sql/serverActions';
-import ShowListDiv from '../../showListDiv';
+import ShowListDiv from '../../(global)/showListDiv';
 
 const priceTags: string[] = [
 	'XL Front',
@@ -202,6 +202,7 @@ export default function BasicSelect({
 	
 			setArrOfPrices(Array(5).fill(0))
 			setPlane(null);
+			setTickets('')
 		}
 		}
 	
@@ -211,7 +212,7 @@ export default function BasicSelect({
 
 //HTML
 	return (
-		<Box className='w-full max-w-4xl' color="primary" sx={{ minWidth: 120 }}>
+		<Box className='w-full max-w-5xl' color="primary" sx={{ minWidth: 120 }}>
 			<Modal
 				aria-labelledby="transition-modal-title"
 				aria-describedby="transition-modal-description"
@@ -295,7 +296,7 @@ export default function BasicSelect({
 							></PriceComponent>
 						))}
 					</Box>
-					<ShowListDiv airports={airports}></ShowListDiv>
+					<ShowListDiv onSubmit={handleSubmit} airports={airports}></ShowListDiv>
 					
 				</FormControl>
 			</form>

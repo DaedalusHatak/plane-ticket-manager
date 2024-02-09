@@ -1,7 +1,7 @@
 "use client"
 import { Box, Button, TextField } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
-import ShowList from "./showList";
+import ShowList from "../(global)/showList";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 export default function ShowListDiv({airports,onSubmit,showAll}:any){
 	const destinationRef = useRef<HTMLInputElement>(null);
@@ -93,6 +93,9 @@ const handleSubmit =  async (e:FormEvent)=>{
 		setDestinationLabel(isInvalid.destination ? "Please select arrival airport" : "Destination");
 		setOrigin(isInvalid.origin ? "" : origin);
 		setDestination(isInvalid.destination ? "" : destination);
+	}else{
+		setOrigin('');
+		setDestination('');
 	}
 }
 
