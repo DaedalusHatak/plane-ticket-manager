@@ -1,23 +1,9 @@
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import LoginForm from "./loginForm";
-import { cookies } from "next/headers";
+import LoginForm from "../../../components/(admin)/login/loginForm";
 import Image from "next/image";
 import { Box } from "@mui/material";
 import { login } from "./serverActions";
 export default async function Page() {
-  const supabase = createServerComponentClient({ cookies });
 
-  const handleSubmit = async (formData: FormData) => {
-    try {
-      console.log(formData)
-      const info = await login(formData);
-      console.log(info);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      // setLoading(false)
-    }
-  };
 
 
   return (

@@ -1,17 +1,14 @@
 "use client";
-
-import { Button, TextField } from "@mui/material";
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
-import SendIcon from "@mui/icons-material/Send";
+import {  useState } from "react";
 
 import { useRouter } from "next/navigation";
-import ShowListDiv from "../../(global)/showListDiv";
-import { handleFlightForm } from "@/src/server-actions/sql/serverActions";
+import ShowListDiv from "../../(global)/showListWrapper";
+import { handleFlightForm } from "@/src/server-actions/handleFlightForm/handleFlightForm";
 
 export default function FindConnection({ airports }: { airports: Airport[] }) {
   const [error, setError] = useState("");
   const router = useRouter();
-  const [errorLabels, setErrorLabels] = useState<any>({
+  const [errorLabels, setErrorLabels] = useState<ErrorLabels>({
     origin: false,
     destination: false,
   });

@@ -1,15 +1,22 @@
 "use client";
 import { Box, Button, CircularProgress, TextField } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import ShowList from "../(global)/showList";
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import ShowList from "./showList";
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
-export default function ShowListDiv({
+type ShowListWrapper = {
+  airports:Airport[];
+  errorLabels:ErrorLabels;
+  setErrorLabels:Dispatch<SetStateAction<ErrorLabels>>
+  showAll?:boolean;
+}
+
+export default function ShowListWrapper({
   airports,
   errorLabels,
   setErrorLabels,
   showAll,
-}: any) {
+}: ShowListWrapper) {
   const destinationRef = useRef<HTMLInputElement>(null);
   const originRef = useRef<HTMLInputElement>(null);
   const [originLabel, setOriginLabel] = useState("Origin");
@@ -101,10 +108,6 @@ export default function ShowListDiv({
     setFilterCountries(event.target.value);
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    setShowList(false);
-  };
-
   return (
     <Box
       sx={{ width: "100%", display: "flex", flexDirection: "column" }}
@@ -144,10 +147,10 @@ export default function ShowListDiv({
 
       <Button
         type="submit"
-        className=" bg-blue-500 hover:bg-blue-900 hover:shadow-[0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)]"
+        className=" bg-blue-500 h-11 hover:bg-blue-900 hover:shadow-[0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)]"
         variant="contained"
         tabIndex={3}
-        onClick={handleSubmit}
+        onClick={e =>    setShowList(false)}
         endIcon={pending ? null : <SendIcon />}
       >
         {pending ? <CircularProgress /> : "Send"}

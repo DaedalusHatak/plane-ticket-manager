@@ -18,20 +18,9 @@ export default function ShowList({
   const setOfCities = new Set(airports.map((city: Airport) => city.country));
   const arrOfCities = Array.from(setOfCities);
 
-  const [arrOfAirports, setArrOfAirports] = useState<Airport[]>([]);
+  const {arrOfAirports} = useFilterResults(airports, filterCountries);
 
-  useEffect(() => {
-    if (filterCountries) {
-      const results = airports.filter((airport: any) =>
-        Object.values(airport).some((value) =>
-          String(value).toLowerCase().includes(filterCountries.toLowerCase())
-        )
-      );
-      setArrOfAirports(results);
-    } else {
-      setArrOfAirports([]);
-    }
-  }, [airports, filterCountries]);
+ 
 
   const setAll = (e: any) => {
     setFilterCountries("all-flights");
@@ -104,4 +93,25 @@ export default function ShowList({
       </div>
     </div>
   );
+}
+
+
+
+
+function useFilterResults(airports:Airport[],filterCountries:string){
+  
+  const [arrOfAirports, setArrOfAirports] = useState<Airport[]>([]);
+  useEffect(() => {
+    if (filterCountries) {
+      const results = airports.filter((airport: any) =>
+        Object.values(airport).some((value) =>
+          String(value).toLowerCase().includes(filterCountries.toLowerCase())
+        )
+      );
+      setArrOfAirports(results);
+    } else {
+      setArrOfAirports([]);
+    }
+  }, [airports, filterCountries]);
+  return {arrOfAirports}
 }

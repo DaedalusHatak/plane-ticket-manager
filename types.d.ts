@@ -37,3 +37,7 @@ type Airport = {
   country:string;
   
 }
+type ErrorLabels = {
+  origin:boolean; 
+  destination:boolean
+}
