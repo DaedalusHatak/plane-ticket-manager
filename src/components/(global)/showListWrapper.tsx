@@ -81,8 +81,8 @@ export default function ShowListWrapper({
     const targetStateSetter = currentTarget === "origin" ? setOrigin : setDestination;
     const airport = setTarget === "all-flights" ? "All airports" : setTarget;
     targetStateSetter(airport);
-		if(currentTarget === 'origin' && destinationRef.current && !destinationRef.current.value) destinationRef.current.focus();
-    else if(currentTarget === 'destination' && originRef.current && !originRef.current.value) originRef.current.focus();
+		if(currentTarget === 'origin' && destinationRef.current  && !destinationRef.current.value) destinationRef.current.focus();
+    else if(currentTarget === 'destination' && originRef.current && !originRef.current?.value) originRef.current.focus();
 	};
 
 
@@ -109,7 +109,7 @@ export default function ShowListWrapper({
 				}}
 			>
 				<TextField
-    ref={originRef}
+  
 					fullWidth
 					inputRef={originRef}
 					value={origin}
@@ -122,7 +122,7 @@ export default function ShowListWrapper({
 					variant="filled"
 				/>
 				<TextField
-        ref={destinationRef}
+       
 					fullWidth
 					inputRef={destinationRef}
 					value={destination}
