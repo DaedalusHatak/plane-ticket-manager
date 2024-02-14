@@ -1,7 +1,22 @@
 "use client";
-import { Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import FlightIcon from "@mui/icons-material/Flight";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useState } from "react";
+
+function Loading(){
+  return <Box
+  display="flex"
+  justifyContent="center"
+  alignItems="center"
+  minHeight="100svh"
+  minWidth="100vw"
+  bgcolor="#00000045"
+  >
+  <CircularProgress/>
+  </Box>
+}
 
 export default function FlightList({
   query,
@@ -11,11 +26,15 @@ export default function FlightList({
   connections: Flight[];
 }) {
   const router = useRouter();
+const [showLoading,setShowLoading] = useState(false)
 
-  const handleClick = (link: string) => {
-    router.push(`/${link}`);
-  };
-  return (
+
+
+if (showLoading) 
+return <Loading/>
+
+
+else return (
     <>
       <h1 className="text-xl w-full bg-red-200 py-7 px-[5%]">
         All results for: {" "}
@@ -25,10 +44,11 @@ export default function FlightList({
       </h1>
       <div className=" bg-green-400 w-full flex-grow h-full py-5 px-[5%]">
         {connections.map((connection: any) => (
-          <div
+          <Link
+          href={connection.tickets_name}
             className=" cursor-pointer relative mt-4 flex w-full justify-between items-center bg-gray-300 min-h-[62px] rounded-md"
             key={connection.id}
-            onClick={(e) => handleClick(connection.tickets_name)}
+            onClick={e=>setShowLoading(true)}
           >
             <Typography className="absolute left-4 text-xs md:text-base">
               {connection.tickets_name}
@@ -46,9 +66,9 @@ export default function FlightList({
             <Typography className="absolute right-4 text-xs md:text-base">
               {connection.prices[4]}zł
             </Typography>
-          </div>
+          </Link>
         ))}
       </div>
     </>
-  );
+  )
 }

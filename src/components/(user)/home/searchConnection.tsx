@@ -2,7 +2,7 @@
 import {  useState } from "react";
 
 import { useRouter } from "next/navigation";
-import ShowListDiv from "../../(global)/showListWrapper";
+import ShowListWrapper from "../../(global)/showListWrapper";
 import { handleFlightForm } from "@/src/server-actions/handleFlightForm/handleFlightForm";
 
 export default function FindConnection({ airports }: { airports: Airport[] }) {
@@ -30,12 +30,12 @@ export default function FindConnection({ airports }: { airports: Airport[] }) {
     <div className=" w-full max-w-5xl ">
       {error && <p className="text-center text-xl text-red-500">{error}</p>}
       <form className="flex" action={(e) => handleParentSubmit(e)}>
-        <ShowListDiv
+        <ShowListWrapper
           showAll={true}
           errorLabels={errorLabels}
           setErrorLabels={setErrorLabels}
           airports={airports}
-        ></ShowListDiv>
+        ></ShowListWrapper>
       </form>
     </div>
   );

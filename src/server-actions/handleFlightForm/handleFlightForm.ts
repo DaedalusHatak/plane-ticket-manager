@@ -29,26 +29,32 @@ export const handleFlightForm = async (
                 airport.airportname.toLowerCase() ===
                 targetLink.destination?.toString().toLowerCase()
             );
-  
-      if (targetLink.origin !== "All airports" && checkOrigin.length !== 1) {
+
+
+            targetLink.origin =
+            targetLink.origin === "All airports"
+              ? "all-flights"
+              : targetLink.origin;
+
+          targetLink.destination =
+            targetLink.destination === "All airports"
+              ? "all-flights"
+              : targetLink.destination;
+
+
+      if (targetLink.origin !== "all-flights" && checkOrigin.length !== 1) {
         isError.origin = true;
       }
   
       if (
-        targetLink.destination !== "All airports" &&
+        targetLink.destination !== "all-flights" &&
         checkDestination.length !== 1
       ) {
         isError.destination = true;
-      } else {
-        targetLink.origin =
-          targetLink.origin === "All airports"
-            ? "all-flights"
-            : targetLink.origin;
-        targetLink.destination =
-          targetLink.destination === "All airports"
-            ? "all-flights"
-            : targetLink.destination;
       }
+      
+
+      
     }
 
   return { targetLink, isError };
