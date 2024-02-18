@@ -1,164 +1,165 @@
-'use client';
-import { Box, Button, CircularProgress, TextField } from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
-import ShowList from './showList';
+"use client";
+import { Box, Button, CircularProgress, TextField } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
+import ShowList from "./showList";
 import {
-	ChangeEvent,
-	Dispatch,
-	SetStateAction,
-	useEffect,
-	useRef,
-	useState,
-} from 'react';
-import { useFormStatus } from 'react-dom';
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { useFormStatus } from "react-dom";
 type ShowListWrapper = {
-	airports: Airport[];
-	errorLabels: ErrorLabels;
-	setErrorLabels: Dispatch<SetStateAction<ErrorLabels>>;
-	showAll?: boolean;
+  airports: Airport[];
+  errorLabels: ErrorLabels;
+  setErrorLabels: Dispatch<SetStateAction<ErrorLabels>>;
+  showAll?: boolean;
 };
 
 export default function ShowListWrapper({
-	airports,
-	errorLabels,
-	setErrorLabels,
-	showAll,
+  airports,
+  errorLabels,
+  setErrorLabels,
+  showAll,
 }: ShowListWrapper) {
+  const originLabel = errorLabels.origin
+    ? "Please select departure airport"
+    : "Origin";
+  const destinationLabel = errorLabels.destination
+    ? "Please select arrival airport"
+    : "Destination";
+  const destinationRef = useRef<HTMLInputElement>(null);
+  const originRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
+  const { pending } = useFormStatus();
 
-	const originLabel = errorLabels.origin
-		? 'Please select departure airport'
-		: 'Origin';
-	const destinationLabel = errorLabels.destination
-		? 'Please select arrival airport'
-		: 'Destination';
-	const destinationRef = useRef<HTMLInputElement>(null);
-	const originRef = useRef<HTMLInputElement>(null);
-	const containerRef = useRef<HTMLDivElement>(null);
+  const [origin, setOrigin] = useState<string>("");
+  const [destination, setDestination] = useState<string>("");
+  const [currentTarget, setCurrentTarget] = useState("");
 
-	const { pending } = useFormStatus();
-
-
-	const [origin, setOrigin] = useState<string>('');
-	const [destination, setDestination] = useState<string>('');
-	const [currentTarget, setCurrentTarget] = useState('');
-  
-	useEffect(() => {
+  useEffect(() => {
     const handleClickOutside = (e: any) => {
       if (containerRef.current && !containerRef.current.contains(e.target)) {
-        setCurrentTarget('');
+        setCurrentTarget("");
       }
     };
 
-		document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
 
-		if (!pending) {
-			setOrigin('');
-			setDestination('');
-		}
+    if (!pending) {
+      setOrigin("");
+      setDestination("");
+    }
 
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [pending]);
 
-		return () => {
-			document.removeEventListener('mousedown', handleClickOutside);
-		};
-	}, [pending]);
+  const handleTargetChange = (newTarget: string) => {
+    setCurrentTarget(newTarget);
 
+    if (errorLabels.origin && newTarget === "origin") {
+      setErrorLabels({ ...errorLabels, origin: false });
+    } else if (errorLabels.destination && newTarget === "destination") {
+      setErrorLabels({ ...errorLabels, destination: false });
+    }
+  };
 
-
-	const handleTargetChange = (newTarget: string) => {
-		setCurrentTarget(newTarget);
-
-		if (errorLabels.origin && newTarget === 'origin') {
-			setErrorLabels({ ...errorLabels, origin: false });
-		} else if (errorLabels.destination && newTarget === 'destination') {
-			setErrorLabels({ ...errorLabels, destination: false });
-		}
-	};
-
-
-
-	const handleAirportList = (setTarget: string) => {
-    const targetStateSetter = currentTarget === "origin" ? setOrigin : setDestination;
+  const handleAirportList = (setTarget: string) => {
+    const targetStateSetter =
+      currentTarget === "origin" ? setOrigin : setDestination;
     const airport = setTarget === "all-flights" ? "All airports" : setTarget;
     targetStateSetter(airport);
-		if(currentTarget === 'origin' && destinationRef.current  && !destinationRef.current.value) destinationRef.current.focus();
-    else if(currentTarget === 'destination' && originRef.current && !originRef.current?.value) originRef.current.focus();
-	};
+    if (
+      currentTarget === "origin" &&
+      destinationRef.current &&
+      !destinationRef.current.value
+    )
+      destinationRef.current.focus();
+    else if (
+      currentTarget === "destination" &&
+      originRef.current &&
+      !originRef.current?.value
+    )
+      originRef.current.focus();
+  };
 
+  const handleChangeInput = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    if (event.target.id === "origin") setOrigin(event.target.value);
+    else if (event.target.id === "destination")
+      setDestination(event.target.value);
+  };
 
-
-	const handleChangeInput = (
-		event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-	) => {
-		if (event.target.id === 'origin') setOrigin(event.target.value);
-		else if (event.target.id === 'destination')
-			setDestination(event.target.value);
-
-	};
-
-
-
-	return (
-		<Box
-			sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}
-			ref={containerRef}
-		>
-			<Box
-				sx={{
-					display: 'flex',
-				}}
-			>
-				<TextField
-  
-					fullWidth
-					inputRef={originRef}
-					value={origin}
-					onChange={(e) => handleChangeInput(e)}
-					autoComplete="off"
-					onFocus={(e) => handleTargetChange('origin')}
-					id="origin"
-					name="origin"
-					label={originLabel}
-					variant="filled"
-				/>
-				<TextField
-       
-					fullWidth
-					inputRef={destinationRef}
-					value={destination}
-					tabIndex={2}
-					autoComplete="off"
-					onChange={(e) => handleChangeInput(e)}
-					onFocus={(e) => handleTargetChange('destination')}
+  return (
+    <Box
+      sx={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        position: "relative",
+      }}
+      ref={containerRef}
+    >
+      <Box
+        sx={{
+          display: "flex",
+        }}
+      >
+        <TextField
+          fullWidth
+          inputRef={originRef}
+          value={origin}
+          onChange={(e) => handleChangeInput(e)}
+          autoComplete="off"
+          onFocus={(e) => handleTargetChange("origin")}
+          id="origin"
+          name="origin"
+          label={originLabel}
+          variant="filled"
+        />
+        <TextField
+          fullWidth
+          inputRef={destinationRef}
+          value={destination}
+          tabIndex={2}
+          autoComplete="off"
+          onChange={(e) => handleChangeInput(e)}
+          onFocus={(e) => handleTargetChange("destination")}
           InputProps={{
-            onFocus: e=> handleTargetChange('destination')
+            onFocus: (e) => handleTargetChange("destination"),
           }}
-					id="destination"
-					name="destination"
-					label={destinationLabel}
-					variant="filled"
-				/>
-			</Box>
+          id="destination"
+          name="destination"
+          label={destinationLabel}
+          variant="filled"
+        />
+      </Box>
 
-			<Button
-				type="submit"
-				className=" bg-blue-500 h-11 hover:bg-blue-900 hover:shadow-[0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)]"
-				variant="contained"
-				tabIndex={3}
-				onClick={(e) => setCurrentTarget('')}
-				endIcon={pending ? null : <SendIcon />}
-			>
-				{pending ? <CircularProgress /> : 'Send'}
-			</Button>
-			{currentTarget && (
-				<ShowList
-					allAirports={showAll}
+      <Button
+        type="submit"
+        className=" bg-blue-500 h-11 hover:bg-blue-900 hover:shadow-[0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)]"
+        variant="contained"
+        tabIndex={3}
+        onClick={(e) => setCurrentTarget("")}
+        endIcon={pending ? null : <SendIcon />}
+      >
+        {pending ? <CircularProgress /> : "Send"}
+      </Button>
+      {currentTarget && (
+        <ShowList
+          allAirports={showAll}
           key={currentTarget === "origin" ? origin : destination}
-filterInput={currentTarget === "origin" ? origin : destination}
-					airports={airports}
-					onClick={handleAirportList}
-				/>
-			)}
-		</Box>
-	);
+          filterInput={currentTarget === "origin" ? origin : destination}
+          airports={airports}
+          onClick={handleAirportList}
+        />
+      )}
+    </Box>
+  );
 }

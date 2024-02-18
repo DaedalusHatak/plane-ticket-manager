@@ -5,27 +5,24 @@ import { useEffect, useState } from "react";
 export default function ShowList({
   airports,
   onClick,
-filterInput,
+  filterInput,
   allAirports,
 }: {
   airports: Airport[];
   onClick: any;
-filterInput:any,
+  filterInput: any;
   allAirports?: boolean;
 }) {
   const setOfCities = new Set(airports.map((city: Airport) => city.country));
   const arrOfCities = Array.from(setOfCities);
-const [filterCountries,setFilterCountries] = useState(filterInput)
-  const {arrOfAirports} = useFilterResults(airports, filterCountries);
-
- 
+  const [filterCountries, setFilterCountries] = useState(filterInput);
+  const { arrOfAirports } = useFilterResults(airports, filterCountries);
 
   const setAll = (e: any) => {
-   
     onClick("all-flights");
   };
   return (
-    <div className="w-full mdlg:divide-x-2  max-h-[540px] mt-4 grid grid-cols-[50%,50%] sm:grid-cols-[1fr,40%] lg:grid-cols-[1fr,30%] rounded-[3px] bg-slate-300">
+    <div className="w-full top-24 absolute mdlg:divide-x-2  max-h-[540px] mt-4 grid grid-cols-[50%,50%] sm:grid-cols-[1fr,40%] lg:grid-cols-[1fr,30%] rounded-[3px] bg-slate-300">
       <ul
         className={`relative ${
           allAirports ? "pt-12" : "pt-1"
@@ -93,11 +90,7 @@ const [filterCountries,setFilterCountries] = useState(filterInput)
   );
 }
 
-
-
-
-function useFilterResults(airports:Airport[],filterCountries:string){
-  
+function useFilterResults(airports: Airport[], filterCountries: string) {
   const [arrOfAirports, setArrOfAirports] = useState<Airport[]>([]);
   useEffect(() => {
     if (filterCountries) {
@@ -111,5 +104,5 @@ function useFilterResults(airports:Airport[],filterCountries:string){
       setArrOfAirports([]);
     }
   }, [airports, filterCountries]);
-  return {arrOfAirports}
+  return { arrOfAirports };
 }
