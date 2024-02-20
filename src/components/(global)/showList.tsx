@@ -22,7 +22,7 @@ export default function ShowList({
 		onClick('all-flights');
 	};
 	return (
-		<div className="w-full top-24 absolute mdlg:divide-x-2  max-h-[540px] mt-4 grid grid-cols-[50%,50%] sm:grid-cols-[1fr,40%] lg:grid-cols-[1fr,30%] rounded-[5px] bg-slate-300 border border-slate-500">
+		<div className="w-full z-10 top-24 absolute mdlg:divide-x-2  max-h-[540px] mt-4 grid grid-cols-[50%,50%] sm:grid-cols-[1fr,40%] lg:grid-cols-[1fr,30%] rounded-[5px] bg-slate-300 border border-slate-500">
 			<ul
 				className={`relative ${
 					allAirports ? 'pt-12' : 'pt-1'

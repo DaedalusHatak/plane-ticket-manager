@@ -36,17 +36,17 @@ return <Loading/>
 
 else return (
     <>
-      <h1 className="text-xl w-full bg-red-200 py-7 px-[5%]">
+      <h1 className="text-xl w-full bg-[#00a2c499] py-7 px-[5%]">
         All results for: {" "}
         <span className="font-bold">
         {query.origin==="all-flights" ? 'All airports' : query.origin} - {query.destination==="all-flights" ? 'All airports' : query.destination}
         </span>
       </h1>
-      <div className=" bg-green-400 w-full flex-grow h-full py-5 px-[5%]">
+      <div className="  bg-gradient-radial from-blue-200  to-indigo-100 w-full flex-grow h-full py-5 px-[5%]">
         {connections.map((connection: any) => (
           <Link
           href={connection.tickets_name}
-            className=" cursor-pointer relative mt-4 flex w-full justify-between items-center bg-gray-300 min-h-[62px] rounded-md"
+            className=" cursor-pointer relative mt-4 flex w-full justify-between items-center bg-gradient-radial from-blue-100  to-indigo-100 shadow-lg border-2 border-slate-300 min-h-[82px] rounded-md"
             key={connection.id}
             onClick={e=>setShowLoading(true)}
           >

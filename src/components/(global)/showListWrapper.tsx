@@ -142,14 +142,14 @@ export default function ShowListWrapper({
       </Box>
 
       <Button
-        type="submit"
-        className=" bg-blue-500 h-11 hover:bg-blue-900 hover:shadow-[0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)]"
+        type="submit"  
+        className= "h-11 hover:shadow-[0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)]"
         variant="contained"
         tabIndex={3}
         onClick={(e) => setCurrentTarget("")}
         endIcon={pending ? null : <SendIcon />}
       >
-        {pending ? <CircularProgress /> : "Send"}
+        {pending ? <CircularProgress color="secondary" /> : "Send"}
       </Button>
       {currentTarget && (
         <ShowList
