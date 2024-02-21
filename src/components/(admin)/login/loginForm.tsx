@@ -1,7 +1,7 @@
 "use client";
-import { login } from "../../../app/(admin)/login/serverActions";
-import { Box, Button, CircularProgress, InputLabel, TextField,FormControl,OutlinedInput, InputAdornment, IconButton } from "@mui/material";
-import { useEffect, useState } from "react";
+
+import { Button, CircularProgress, InputLabel,FormControl, InputAdornment, IconButton } from "@mui/material";
+import {  useState } from "react";
 
 import { useFormStatus } from "react-dom";
 
@@ -30,20 +30,22 @@ export default function Form() {
         name="email"
         type="email"
         label="E-mail"
-        InputLabelProps={{style:{color:"white",borderColor:"white"}}}
+        InputLabelProps={{style:{color:"#fff",borderColor:"#fff"}}}
+        InputProps={{style:{color:"#fff"}}}
         color="secondary"
         variant="outlined"
         required
       />
       <FormControl>
-        <InputLabel style={{color:"white"}} >Password</InputLabel>
+        <InputLabel style={{color:"#fff"}} >Password</InputLabel>
         <LoginOutlinedInput  type={showPassword ? 'text' : 'password'}
-        inputProps={{style:{color:"white",borderColor:"white"}}}
+        inputProps={{style:{color:"#fff",borderColor:"#fff"}}}
     color="secondary"
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
                   aria-label="toggle password visibility"
+                  color="secondary"
                   onClick={handleClickShowPassword}
                   onMouseDown={handleMouseDownPassword}
                   edge="end"

@@ -24,7 +24,7 @@ export default function CardWrapper() {
     },
   ];
   return (
-    <Box className="flex flex-wrap md:flex-nowrap  gap-8 max-w-5xl">
+    <Box className="flex flex-wrap md:flex-nowrap px-12 gap-8 max-w-5xl">
       {cardList.map((card) => (
         <Card key={card.title} Icon={card.icon} title={card.title} desc={card.desc} />
       ))}

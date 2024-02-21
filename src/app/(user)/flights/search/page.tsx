@@ -23,18 +23,20 @@ export default async function Page({
   const { rows: airports } = await sql`SELECT * from airports`;
   return (
     <main className="flex  text-black  min-h-screen flex-col items-center">
-     <div className="w-full flex justify-center items-center p-12 bg-gradient-radial from-blue-200  to-indigo-100">
+     <div className="w-full  flex justify-center  px-12 pt-12 bg-blue-200">
      <SearchConnection airports={airports as Airport[]}></SearchConnection>
      </div>
       {con.rows.length > 0 ? (
         <FlightList query={searchParams} connections={connections}></FlightList>
       ) : (
         <Box
+        className="bg-gradient-to-b from-blue-200 to-5% pt-12 to-[#f4f4f4]"
           sx={{
             display: "flex",
             flexGrow: "1",
             alignItems: "center",
             height: "100%",
+            width:"100%"
           }}
         >
           <Typography

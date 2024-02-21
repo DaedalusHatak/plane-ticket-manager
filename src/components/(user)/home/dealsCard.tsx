@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function DealsCard() {
   return (
-<Box className="flex justify-center items-center flex-wrap md:flex-nowrap mt-28  gap-8 max-w-5xl">
+<Box className="flex  justify-center items-center flex-wrap md:flex-nowrap px-12  gap-8 max-w-5xl  pt-12">
 
 <Image
       src="/dealsPlane2.jpg"

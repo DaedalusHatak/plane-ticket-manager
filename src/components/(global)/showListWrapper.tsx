@@ -1,5 +1,5 @@
 "use client";
-import { Box, Button, CircularProgress, TextField } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import ShowList from "./showList";
 import {
@@ -11,6 +11,7 @@ import {
   useState,
 } from "react";
 import { useFormStatus } from "react-dom";
+import { ButtonBlue, StyledFilledInput } from "@/src/utils/muiStyled/textField";
 type ShowListWrapper = {
   airports: Airport[];
   errorLabels: ErrorLabels;
@@ -101,6 +102,7 @@ export default function ShowListWrapper({
       sx={{
         width: "100%",
         display: "flex",
+        gap:'15px',
         flexDirection: "column",
         position: "relative",
       }}
@@ -109,9 +111,10 @@ export default function ShowListWrapper({
       <Box
         sx={{
           display: "flex",
+          gap:'5px'
         }}
       >
-        <TextField
+        <StyledFilledInput
           fullWidth
           inputRef={originRef}
           value={origin}
@@ -123,7 +126,7 @@ export default function ShowListWrapper({
           label={originLabel}
           variant="filled"
         />
-        <TextField
+        <StyledFilledInput
           fullWidth
           inputRef={destinationRef}
           value={destination}
@@ -141,7 +144,7 @@ export default function ShowListWrapper({
         />
       </Box>
 
-      <Button
+      <ButtonBlue
         type="submit"  
         className= "h-11 hover:shadow-[0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)]"
         variant="contained"
@@ -150,7 +153,7 @@ export default function ShowListWrapper({
         endIcon={pending ? null : <SendIcon />}
       >
         {pending ? <CircularProgress color="secondary" /> : "Send"}
-      </Button>
+      </ButtonBlue>
       {currentTarget && (
         <ShowList
           allAirports={showAll}

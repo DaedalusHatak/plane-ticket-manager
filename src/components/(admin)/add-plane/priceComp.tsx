@@ -83,7 +83,7 @@ import { Box, styled } from "@mui/material";
           }}
         ></BaseNumberInput>
         <label
-          className={`text-gray-600 absolute pl-2 z-1 transition-all peer-focus:top-0 ${
+          className={`text-gray-600 absolute pl-2 -z-[10] transition-all peer-focus:top-0 ${
             focus === true
               ? "top-0 text-[10px] md:text-[12px]"
               : "top-[50%] translate-y-[-50%] text-[10px] md:text-[15px]"
@@ -117,6 +117,7 @@ const StyledInputRoot = styled("div")(
     }
   
     &:hover {
+      background:#64748b8c;
       border-color: ${blue[400]};
     }
   
@@ -135,12 +136,15 @@ const StyledInputRoot = styled("div")(
     line-height: 1.5;
     width: 100%;
     color: ${theme.palette.mode === "dark" ? grey[300] : grey[900]};
-    background: inherit;
     border: none;
     border-radius: inherit;
     padding: 8px 12px;
     outline: 0;
     z-index:5;
+      cursor:pointer;
+      background:none;
+   
+
   `
   );
   
