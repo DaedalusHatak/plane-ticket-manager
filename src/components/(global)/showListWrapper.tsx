@@ -11,7 +11,8 @@ import {
   useState,
 } from "react";
 import { useFormStatus } from "react-dom";
-import { ButtonBlue, StyledFilledInput } from "@/src/utils/muiStyled/textField";
+import { StyledFilledInput } from "@/src/utils/muiStyled/textField";
+import { ButtonBlue } from "@/src/utils/muiStyled/button";
 type ShowListWrapper = {
   airports: Airport[];
   errorLabels: ErrorLabels;
@@ -102,7 +103,7 @@ export default function ShowListWrapper({
       sx={{
         width: "100%",
         display: "flex",
-        gap:'15px',
+        gap: "15px",
         flexDirection: "column",
         position: "relative",
       }}
@@ -111,7 +112,7 @@ export default function ShowListWrapper({
       <Box
         sx={{
           display: "flex",
-          gap:'5px'
+          gap: "5px",
         }}
       >
         <StyledFilledInput
@@ -145,8 +146,8 @@ export default function ShowListWrapper({
       </Box>
 
       <ButtonBlue
-        type="submit"  
-        className= "h-11 hover:shadow-[0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)]"
+        type="submit"
+        className="h-11 hover:shadow-[0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)]"
         variant="contained"
         tabIndex={3}
         onClick={(e) => setCurrentTarget("")}
