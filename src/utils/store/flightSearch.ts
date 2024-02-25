@@ -1,14 +1,12 @@
-import { handleFindingConnection } from "@/src/server-actions/sql/serverActions";
 import { createSlice } from "@reduxjs/toolkit";
 export type FlightSearch = {
-  origin:string,
-  destination:string,
-}
-const initialState:FlightSearch = {
-    origin:"",
-  destination:"",
-
-}
+  passengers: Passenger[];
+};
+export type Passenger = {
+  firstName: string;
+  lastName: string;
+};
+const initialState: FlightSearch = { passengers: [] };
 export const flightSearch = createSlice({
   name: "modal",
   initialState,
@@ -18,15 +16,11 @@ export const flightSearch = createSlice({
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
-      
-      state.origin = action.payload.origin;
-      state.destination = action.payload.destination;
-     
-    },
 
-    
+      state.passengers = action.payload;
+    },
   },
 });
 
 export const { updateSearch } = flightSearch.actions;
-export default flightSearch.reducer
+export default flightSearch.reducer;

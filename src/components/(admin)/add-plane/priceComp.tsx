@@ -1,102 +1,99 @@
 import { useEffect, useRef, useState } from "react";
 import {
-    Unstable_NumberInput as BaseNumberInput,
-    numberInputClasses,
-  } from "@mui/base/Unstable_NumberInput";
+  Unstable_NumberInput as BaseNumberInput,
+  numberInputClasses,
+} from "@mui/base/Unstable_NumberInput";
 import { Box, styled } from "@mui/material";
 
+export default function PriceComponent({
+  price,
+  idx,
+  setArrOfPrices,
+}: {
+  idx: number;
+  setArrOfPrices: Function;
+  price: number | undefined;
+}) {
+  const [focus, setFocus] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
+  const priceTags: string[] = [
+    "XL Front",
+    "Fast Exit",
+    "Front",
+    "XL Back",
+    "Cheap",
+  ];
 
-  
-  export default function PriceComponent({
-    price,
-    idx,
-    setArrOfPrices,
-  }: {
-    idx: number;
-    setArrOfPrices: Function;
-    price: number | undefined;
-  }) {
-    const [focus, setFocus] = useState(false);
-    const inputRef = useRef<HTMLInputElement>(null);
+  const handlePrices = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    if (e.target.value !== "") setFocus(true);
 
-    const priceTags: string[] = [
-        "XL Front",
-        "Fast Exit",
-        "Front",
-        "XL Back",
-        "Cheap",
-      ];
+    const regex = /^[0-9\b]+$/;
+    if (e.target.value === "" || regex.test(e.target.value)) {
+      setArrOfPrices((prev: number[]) => {
+        const newArr = [...prev];
+        newArr[index] = parseInt(e.target.value) ? parseInt(e.target.value) : 0;
+        return newArr;
+      });
+    }
+  };
 
-    const handlePrices = (
-      e: React.ChangeEvent<HTMLInputElement>,
-      index: number
-    ) => {
-      if (e.target.value !== "") setFocus(true);
-  
-      const regex = /^[0-9\b]+$/;
-      if (e.target.value === "" || regex.test(e.target.value)) {
-        setArrOfPrices((prev: number[]) => {
-          const newArr = [...prev];
-          newArr[index] = parseInt(e.target.value) ? parseInt(e.target.value) : 0;
-          return newArr;
-        });
-      }
-    };
-  
-    useEffect(() => {
-      if (price === 0) setFocus(false);
-    }, [price]);
-  
-    return (
-      <Box
-        sx={{
-          position: "relative",
-          background: "rgba(0,0,0,0.06)",
-          borderRadius: "8px",
-          maxWidth: "100px",
-          height: "45px",
+  useEffect(() => {
+    if (price === 0) setFocus(false);
+  }, [price]);
+
+  return (
+    <Box
+      sx={{
+        position: "relative",
+        background: "rgba(0,0,0,0.06)",
+        borderRadius: "8px",
+        maxWidth: "100px",
+        height: "45px",
+      }}
+    >
+      <BaseNumberInput
+        required
+        min={0}
+        onFocus={(e) => setFocus(true)}
+        onBlur={(e) => (price === 0 ? setFocus(false) : setFocus(true))}
+        onChange={(e) =>
+          handlePrices(e as React.ChangeEvent<HTMLInputElement>, idx)
+        }
+        inputRef={inputRef}
+        value={price}
+        endAdornment={"zł"}
+        className={`${"Mui-error" ? "border-red-600" : ""}`}
+        onInputChange={(e) => handlePrices(e, idx)}
+        slots={{
+          root: StyledInputRoot,
+          input: StyledInputElement,
         }}
+        slotProps={{
+          input: {
+            className: "placeholder-opacity-100",
+            value: price ? price : "",
+          },
+        }}
+      ></BaseNumberInput>
+      <label
+        className={`text-gray-600 absolute pl-3 -z-[10] transition-all peer-focus:top-0 ${
+          focus === true
+            ? "top-0 text-[10px] md:text-[12px]"
+            : "top-[50%] translate-y-[-50%] text-[10px] md:text-[15px]"
+        }`}
       >
-        <BaseNumberInput
-          required
-          min={0}
-          onFocus={(e) => setFocus(true)}
-          onBlur={(e) => (price === 0 ? setFocus(false) : setFocus(true))}
-          onChange={(e) =>
-            handlePrices(e as React.ChangeEvent<HTMLInputElement>, idx)
-          }
-          inputRef={inputRef}
-          value={price}
-          endAdornment={"zł"}
-          className={`${"Mui-error" ? "border-red-600" : ""}`}
-          onInputChange={(e) => handlePrices(e, idx)}
-          slots={{
-            root: StyledInputRoot,
-            input: StyledInputElement,
-          }}
-          slotProps={{
-            input: {
-              className: "placeholder-opacity-100",
-              value: price ? price : "",
-            },
-          }}
-        ></BaseNumberInput>
-        <label
-          className={`text-gray-600 absolute pl-2 -z-[10] transition-all peer-focus:top-0 ${
-            focus === true
-              ? "top-0 text-[10px] md:text-[12px]"
-              : "top-[50%] translate-y-[-50%] text-[10px] md:text-[15px]"
-          }`}
-        >
-          {priceTags[idx]} *
-        </label>
-      </Box>
-    );
-  }
-  //CSS variables
+        {priceTags[idx]} *
+      </label>
+    </Box>
+  );
+}
+//CSS variables
 const StyledInputRoot = styled("div")(
-    ({ theme }) => `
+  ({ theme }) => `
     font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 400;
     border-radius: 8px;
@@ -126,10 +123,10 @@ const StyledInputRoot = styled("div")(
       outline: 0;
     }
   `
-  );
-  
-  const StyledInputElement = styled("input")(
-    ({ theme }) => `
+);
+
+const StyledInputElement = styled("input")(
+  ({ theme }) => `
     font-size: 0.875rem;
     font-family: inherit;
     font-weight: 400;
@@ -146,16 +143,15 @@ const StyledInputRoot = styled("div")(
    
 
   `
-  );
-  
-  const blue = {
-    200: "#80BFFF",
-    400: "#3399FF",
-    600: "#0072E5",
-  };
-  
-  const grey = {
-    300: "#C7D0DD",
-    900: "#1C2025",
-  };
-  
+);
+
+const blue = {
+  200: "#80BFFF",
+  400: "#3399FF",
+  600: "#0072E5",
+};
+
+const grey = {
+  300: "#C7D0DD",
+  900: "#1C2025",
+};

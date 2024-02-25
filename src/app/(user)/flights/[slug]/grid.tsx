@@ -1,15 +1,25 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Seat from "./seat";
-
-export default function Grid({ data }: { data: Seat[] }) {
+export default function Grid({
+  data,
+  passengerList,
+}: {
+  data: Seat[];
+  passengerList: PassengerData;
+}) {
   const [chunkedArray, setChunkedArray] = useState<Seat[]>(data);
+  const [index, setIndex] = useState(0);
 
   async function updateSeat(element: Seat) {
+    if (index >= passengerList.data.length) return;
     const updatedElement = {
       ...element,
       is_taken: true,
-      name: "Paweł Sr",
+      name:
+        passengerList.data[index].firstName +
+        " " +
+        passengerList.data[index].lastName,
     };
 
     const idx = chunkedArray.findIndex(
@@ -27,6 +37,7 @@ export default function Grid({ data }: { data: Seat[] }) {
             newArray[i] = updatedData;
           }
         });
+        setIndex(index + 1);
       }
 
       return newArray;
@@ -34,6 +45,16 @@ export default function Grid({ data }: { data: Seat[] }) {
   }
   return (
     <section className=" text-black w-full">
+      <div>
+        {passengerList &&
+          passengerList.data.map(
+            (passenger: PassengerDetails, index: number) => (
+              <p onClick={(e) => setIndex(index)} key={index}>
+                {passenger.firstName} {passenger.lastName}
+              </p>
+            )
+          )}
+      </div>
       <div className="overflow-y-hidden w-full  flex justify-center">
         <div className=" grid grid-cols-[repeat(7,minmax(0,min-content))] gap-3 border-plane ">
           {chunkedArray.map((element: Seat, index: number) => (

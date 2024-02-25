@@ -32,12 +32,21 @@ type Flight = {
   destination: string;
 };
 type Airport = {
-  airportcode:string;
-  airportname:string;
-  country:string;
-  
-}
+  airportcode: string;
+  airportname: string;
+  country: string;
+};
 type ErrorLabels = {
-  origin:boolean; 
-  destination:boolean
-}
+  origin: boolean;
+  destination: boolean;
+};
+
+type PassengerData = {
+  date: Date | string;
+  uuid: string;
+  data: JsonData[];
+};
+type PassengerDetails = {
+  firstName: string;
+  lastName: string;
+};
