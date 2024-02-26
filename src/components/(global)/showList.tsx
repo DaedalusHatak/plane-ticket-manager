@@ -33,11 +33,11 @@ export default function ShowList({
 						<div
 							onClick={(e) => setAll(e)}
 							tabIndex={0}
-							className={`px-2  absolute left-1/2 top-1 -translate-x-1/2 w-min cursor-pointer ${
-								filterCountries === 'all-flights' ? 'bg-green-500 px-2' : ''
+							className={`px-2  absolute left-1/2 top-1 -translate-x-1/2  cursor-pointer ${
+								filterCountries === 'All airports' ? 'bg-green-500 px-2' : ''
 							} rounded-xl p-1`}
 						>
-							All
+							<span className='hover:border-b-2 hover:border-green-500'>All airports</span>
 						</div>
 					)}
 					{arrOfCities.map((airport) => (
@@ -45,7 +45,7 @@ export default function ShowList({
 							<div
 								onClick={(e) => setFilterCountries(airport)}
 								tabIndex={0}
-								className={`px-2 w-min cursor-pointer ${
+								className={`px-2 w-min cursor-pointer   ${
 									(filterCountries &&
 										airport
 											.toLowerCase()
@@ -61,7 +61,7 @@ export default function ShowList({
 										: ''
 								} rounded-xl p-1`}
 							>
-								{airport}
+								<span className='hover:border-b-2 hover:border-green-500'>{airport}</span>
 							</div>
 						</div>
 					))}
@@ -73,7 +73,7 @@ export default function ShowList({
 						key={airport.airportcode}
 						onClick={(e) => {onClick(airport.airportname); setFilterCountries('')}}
 						tabIndex={0}
-						className={`px-2 index  w-fit cursor-pointer ${
+						className={`px-2 index  w-fit cursor-pointer  ${
 							filterCountries &&
 							airport.airportname
 								.toLowerCase()
@@ -82,7 +82,7 @@ export default function ShowList({
 								: ''
 						} rounded-xl p-1`}
 					>
-						{airport.airportname}
+						<span className='hover:border-b-2 hover:border-green-500'>{airport.airportname}</span>
 					</div>
 				))}
 			</div>

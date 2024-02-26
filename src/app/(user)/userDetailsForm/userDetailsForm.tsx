@@ -48,10 +48,10 @@ export default function UserDetailsForm({ forward, setForward }: any) {
   };
 
   return (
-    <div className="w-full  z-10  h-svh overflow-hidden absolute bg-[#000000dd] ">
+    <div className="w-full top-0 left-0 z-10  h-full fixed bg-[#000000dd] ">
       <div
         ref={containerRef}
-        className="absolute z-20 rounded-lg left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-full md:w-[30rem] bg-slate-300 px-8 py-24"
+        className="fixed z-20 rounded-lg left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-full md:w-[30rem] bg-slate-300 px-8 py-24"
       >
         <h1 className="mb-5 text-center text-xl font-bold">
           {passengerAmount > 0

@@ -1,5 +1,5 @@
 import ShowListWrapper from "@/src/components/(global)/showListWrapper";
-import FlightList from "@/src/components/(user)/flight-search/flightList";
+import FlightSearch from "@/src/components/(user)/flight-search/flightSearch";
 import SearchConnection from "@/src/components/(user)/home/searchConnection";
 import { handleFindingConnection } from "@/src/server-actions/sql/serverActions";
 import { Box, Typography } from "@mui/material";
@@ -23,7 +23,7 @@ export default async function Page({
         <SearchConnection airports={airports as Airport[]}></SearchConnection>
       </div>
       {con.rows.length > 0 ? (
-        <FlightList query={searchParams} connections={connections}></FlightList>
+        <FlightSearch query={searchParams} connections={connections}></FlightSearch>
       ) : (
         <Box
           className="bg-gradient-to-b from-blue-200 to-5% pt-12 to-[#f4f4f4]"

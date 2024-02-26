@@ -36,3 +36,12 @@ export const handleFindingConnection = async (
     return e.message;
   }
 };
+
+export const handleSelectingSeat = async () => {
+  try {
+    const connections = await sql``
+  }
+  catch(e){
+    console.log(e)
+  }
+}

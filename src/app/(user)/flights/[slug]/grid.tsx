@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Seat from "./seat";
+import { ButtonBlue } from "@/src/utils/muiStyled/button";
 export default function Grid({
   data,
   passengerList,
@@ -54,7 +55,8 @@ export default function Grid({
               </p>
             )
           )}
-      </div>
+          <ButtonBlue>Pay</ButtonBlue>
+                </div>
       <div className="overflow-y-hidden w-full  flex justify-center">
         <div className=" grid grid-cols-[repeat(7,minmax(0,min-content))] gap-3 border-plane ">
           {chunkedArray.map((element: Seat, index: number) => (
