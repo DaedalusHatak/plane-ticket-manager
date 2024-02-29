@@ -10,7 +10,7 @@ export default async function Home({ params }: { params: { slug: string } }) {
   const fileJson = getBasket(passId);
   if (!fileJson) redirect("/");
   const { rows } =
-    await sql`SELECT * from seats WHERE ticket_id = ${params.slug.toUpperCase()}`;
+    await sql`SELECT * from seats WHERE ticket_id = ${params.slug.toUpperCase()} ORDER BY seat_number ASC`;
   const newChunkedArray: QueryResultRow | number = [];
   for (let i = 0; i < rows.length; i += 6) {
     const chunk = rows.slice(i, i + 6);
@@ -22,7 +22,7 @@ export default async function Home({ params }: { params: { slug: string } }) {
   }
   return (
     <main className="flex text-black  min-h-svh flex-col items-center py-3 px-3">
-      <Grid passengerList={fileJson} data={newChunkedArray as Seat[]}></Grid>
+      <Grid ticketId={params.slug.toUpperCase()} passengerList={fileJson} data={newChunkedArray as Seat[]}></Grid>
     </main>
   );
 }

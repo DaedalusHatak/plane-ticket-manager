@@ -8,7 +8,7 @@ export const handleSubmitForm = (e: FormData, forward: any) => {
   const id = uuidv4();
   const currDate = new Date();
   const newDate = new Date(currDate);
-  newDate.setMinutes(currDate.getMinutes() + 2);
+  newDate.setMinutes(currDate.getMinutes() + 15);
   cookies().set("passid", id, { expires: newDate });
   const values = e.entries();
   type Forms = ["first" | "last", "name", string];

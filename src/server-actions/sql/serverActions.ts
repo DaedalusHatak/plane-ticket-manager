@@ -37,9 +37,18 @@ export const handleFindingConnection = async (
   }
 };
 
-export const handleSelectingSeat = async () => {
+export const handleSelectingSeat = async (flightCode:string,passList:PassengerDetails[]) => {
+console.log(passList)
   try {
-    const connections = await sql``
+
+  passList.forEach(async({firstName,lastName,seat}) => {
+    const fullName =firstName + " " + lastName;
+    const connections = await sql`
+    UPDATE seats
+    SET is_taken = true, name = ${fullName}
+    WHERE (seat_number =${seat}) AND (ticket_id =${flightCode})
+    `
+  })
   }
   catch(e){
     console.log(e)

@@ -2,6 +2,7 @@ import { useState } from "react";
 
 export default function Seat({
   seat,
+  
   setNewSeat,
 }: {
   seat: Seat;
@@ -37,6 +38,7 @@ export default function Seat({
         onMouseLeave={(e) => setShowSeat(null)}
         onClick={(e) => setNewSeat(seat)}
         className={`h-8 w-8  ${seat.is_taken ? "bg-red-400" : ""}`}
+        disabled={seat.is_taken}
       >
         {initials}
       </button>

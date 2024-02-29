@@ -7,15 +7,12 @@ import { useEffect, useRef, useState } from "react";
 import { handleSubmitForm } from "./submitPassengers";
 
 export default function UserDetailsForm({ forward, setForward }: any) {
-  const t = new Date();
-  const router = useRouter();
   const [passengerAmount, setPassengerAmount] = useState(0);
   const [error, setError] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const handleClickOutside = (e: any) => {
       const numbs = containerRef.current?.getBoundingClientRect();
-      console.log(numbs);
       if (containerRef.current && numbs) {
         if (
           e.clientX < numbs.x ||
@@ -23,7 +20,7 @@ export default function UserDetailsForm({ forward, setForward }: any) {
           e.clientX > numbs.x + numbs.width ||
           e.clientY > numbs.y + numbs.height
         ) {
-          console.log(e);
+        
           setForward("");
         }
       }
