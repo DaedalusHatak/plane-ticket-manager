@@ -1,10 +1,11 @@
 type Seat = {
-  _id: ObjectId | string;
-  seat_number: string;
-  price: number;
+  id: ObjectId | string;
   is_taken: boolean;
-  name?: string;
-  paid?: boolean;
+  price: number;
+  ticket_id:string;
+ seat_number:string;
+ name?:string;
+ paid:boolean;
 };
 type SeatMongo = {
   _id: ObjectId | string;
@@ -49,4 +50,5 @@ type PassengerData = {
 type PassengerDetails = {
   firstName: string;
   lastName: string;
+  seat?: string;
 };

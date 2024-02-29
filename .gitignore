@@ -35,3 +35,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env
+src/basket.json
+src/app/(user)/tester/client.tsx
+src/app/(user)/tester/data.json
+src/app/(user)/tester/page.tsx
+src/app/(user)/tester/server.ts
