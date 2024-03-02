@@ -1,12 +1,7 @@
 import fs from "fs";
-import chokidar from "chokidar";
-const fileContent = fs.readFileSync(
-  process.cwd() + "/src/basket.json",
-  "utf-8"
-);
 
 export function getBasket(passId: any) {
-  const fileJson = fs.readFileSync(process.cwd() + "/src/basket.json", "utf-8");
+  const fileJson = fs.readFileSync(process.cwd() + "/tmp/basket.json", "utf-8");
 
   const currDate = new Date();
 
@@ -21,7 +16,7 @@ export function getBasket(passId: any) {
   });
 
   fs.writeFileSync(
-    process.cwd() + "/src/basket.json",
+    process.cwd() + "/tmp/basket.json",
     JSON.stringify(newData, null, 2),
     "utf-8"
   );
@@ -35,12 +30,12 @@ export function getBasket(passId: any) {
 }
 export function setBasket(uuid: any, newDate: any, data: any) {
   const fileData = JSON.parse(
-    fs.readFileSync(process.cwd() + "/src/basket.json", "utf-8")
+    fs.readFileSync(process.cwd() + "/tmp/basket.json", "utf-8")
   );
   const newData = { date: newDate, uuid: uuid, data: data };
   fileData.push(newData);
   const fileJson = fs.writeFileSync(
-    process.cwd() + "/src/basket.json",
+    process.cwd() + "/tmp/basket.json",
     JSON.stringify(fileData, null, 2),
     "utf-8"
   );
