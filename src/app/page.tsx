@@ -1,7 +1,6 @@
 import { sql } from "@vercel/postgres";
 import { unstable_noStore as noStore } from "next/cache";
 import SearchConnection from "../components/(user)/home/searchConnection";
-import Modal from "../components/(global)/modal";
 import CardWrapper from "../components/(user)/home/cardWrapper";
 import DealsCard from "../components/(user)/home/dealsCard";
 import LatestFlights from "../components/(user)/home/latestFlights";
