@@ -4,28 +4,69 @@ import Seat from "./seat";
 import { ButtonBlue } from "@/src/utils/muiStyled/button";
 import { Box } from "@mui/material";
 import { handleSelectingSeat } from "@/src/server-actions/sql/serverActions";
+import { useRouter } from "next/navigation";
+import Error from "next/error";
+import { deleteFromBasket } from "../../userDetailsForm/updateBasket";
+import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 export default function Grid({
   data,
   passengerList,
+  passId,
   ticketId,
 }: {
   data: Seat[];
   passengerList: PassengerData;
+  passId:RequestCookie,
   ticketId:string;
 }) {
+
+  console.log(passengerList)
+const [isGoingToExpire,setIsGoingToExpire] = useState(false)
+  const expirationTime = new Date(passengerList.date)
+  const currentTime = new Date().getTime()
+const timeoutTime = expirationTime.getTime() - (1 * 60 * 1000);
+const delay = timeoutTime - Date.now();
+
+if(timeoutTime > currentTime){
+  setTimeout(()=>{
+    setIsGoingToExpire(true)
+    },delay)
+    setTimeout(async ()=>{
+      await deleteFromBasket(passId.value, ticketId)
+      router.push('/')
+    },timeoutTime)
+}
+
+
+
+  const router = useRouter();
+
   const [chunkedArray, setChunkedArray] = useState<Seat[]>(data);
   const [index, setIndex] = useState(0);
-    const [passList,setPassList] = useState(passengerList.data);
+    const [passList,setPassList] = useState(passengerList.passenger_list);
 
+ 
+async function handleConfirmation() {
+await passList.forEach((e)=>{
+if(!e.seat){
+  throw new Error({statusCode:404,title:"Something went wrong"})
+}
+})
+const isSuccess = await handleSelectingSeat(ticketId,passList,passId.value)
+if(isSuccess){
+  router.push('/confirmation')
+}
+else console.log('something went wrong')
+}
 
   async function updateSeat(element: Seat) {
-
 
     passList[index].seat = element.seat_number;
     if (index >= passList.length) return;
     const updatedElement = {
       ...element,
       is_taken: true,
+      uuid:passId.value,
       name:
         passList[index].firstName +
         " " +
@@ -40,7 +81,14 @@ export default function Grid({
       if (newArray[idx].is_taken === false) {
         newArray[idx] = updatedElement;
         newArray.forEach((e, i) => {
-          if (i !== idx && e.name && updatedElement.name  ===  e.name) {
+          if(i !== idx && e.uuid && passId.value ===  e.uuid){
+            const updatedData = { ...e, is_taken: false };
+            delete updatedData.name;
+            delete updatedData.uuid;
+            newArray[i] = updatedData;
+          }
+          else if (i !== idx && e.name && updatedElement.name  ===  e.name && (e.uuid && updatedElement.uuid === e.uuid)) {
+          console.log("else if")
             const updatedData = { ...e, is_taken: false };
             delete updatedData.name;
 
@@ -55,7 +103,12 @@ export default function Grid({
       return newArray;
     });
   }
-  return (
+  if(isGoingToExpire)
+  return(<section>
+    Your session is about to expire!
+  </section>)
+  else return (
+    
     <section className=" text-black w-full">
 
 
@@ -73,7 +126,7 @@ export default function Grid({
  </li>
 ))}
    
-  <ButtonBlue onClick={e=>handleSelectingSeat(ticketId,passList)}>Confirm booking</ButtonBlue>
+  <ButtonBlue onClick={e=>handleConfirmation()}>Confirm booking</ButtonBlue>
   </ul>
 </Box>
 
@@ -96,7 +149,7 @@ export default function Grid({
                 element.seat_number !== "01D" &&
                 element.seat_number !== "01E" &&
                 element.seat_number !== "01F" && (
-                  <Seat  setNewSeat={updateSeat} seat={element}></Seat>
+                  <Seat isPassenger={passengerList}  setNewSeat={updateSeat} seat={element}></Seat>
                 )}
             </div>
           ))}

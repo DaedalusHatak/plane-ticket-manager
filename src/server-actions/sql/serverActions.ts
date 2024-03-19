@@ -1,6 +1,8 @@
 "use server";
 
 import { sql } from "@vercel/postgres";
+import { cookies } from "next/headers";
+import { useRouter } from "next/navigation";
 
 export const handleInsertFlights = async (
   plane: Plane,
@@ -37,20 +39,23 @@ export const handleFindingConnection = async (
   }
 };
 
-export const handleSelectingSeat = async (flightCode:string,passList:PassengerDetails[]) => {
-console.log(passList)
+export const handleSelectingSeat = async (flightCode:string,passList:PassengerDetails[],passId:string) => {
+console.log(cookies())
+
   try {
 
   passList.forEach(async({firstName,lastName,seat}) => {
     const fullName =firstName + " " + lastName;
     const connections = await sql`
     UPDATE seats
-    SET is_taken = true, name = ${fullName}
+    SET is_taken = true, name = ${fullName}, uuid = ${passId}
     WHERE (seat_number =${seat}) AND (ticket_id =${flightCode})
     `
   })
+return true;
   }
   catch(e){
     console.log(e)
+    return false;
   }
 }

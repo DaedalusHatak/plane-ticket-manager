@@ -9,6 +9,7 @@ import FlightIcon from "@mui/icons-material/Flight";
 export default function FlightList({flights,card}:any){
     const [showLoading, setShowLoading] = useState(false);
     const [forward, setForward] = useState("");
+
     const classes = card ? ["max-w-5xl flex justify-center gap-5 flex-wrap","flex-wrap flex-1 min-w-44 max-w-72 px-8 py-14","top-3 left-1/2 -translate-x-1/2","","bottom-3 left-1/2 -translate-x-1/2"] : ["flex-grow h-full  py-5 px-[5%]","w-full py-2 sm:py-3","left-4 top-1/2 -translate-y-1/2","sm:flex-row","right-4 top-1/2 -translate-y-1/2"]
 
 
