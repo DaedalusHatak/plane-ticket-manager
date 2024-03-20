@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    reactStrictMode:false,
 env:{
     // LINK:process.env.NEXT_LINK,
     // API:process.env.NEXT_API,

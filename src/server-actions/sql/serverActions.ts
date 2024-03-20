@@ -1,6 +1,7 @@
 "use server";
 
 import { sql } from "@vercel/postgres";
+import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { cookies } from "next/headers";
 import { useRouter } from "next/navigation";
 
@@ -58,4 +59,19 @@ return true;
     console.log(e)
     return false;
   }
+}
+
+export const updateCookie = async (passId:RequestCookie,ticketId:string) =>{
+  const newExpiration = new Date();
+  newExpiration.setMinutes(newExpiration.getMinutes() + 2);
+  if(passId){
+    //TODO: UPDATE COOKIES
+    cookies().set('passid',passId.value,{expires:newExpiration})
+
+      sql`
+      UPDATE basket
+      SET date = ${newExpiration.toISOString()}
+      WHERE (uuid =${passId.value}) AND (ticket_code =${ticketId})
+      `
+     }
 }

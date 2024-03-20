@@ -4,30 +4,20 @@ import Grid from "./grid";
 import { cookies } from "next/headers";
 
 import { redirect } from "next/navigation";
-import { POST } from "./api/route";
+import WarningModal from "./warningModal";
+
 
 export default async function Home({ params }: { params: { slug: string } }) {
   noStore();
   const passId = cookies().get("passid");
-
+  if(!passId) redirect("/");
   const {rows:fileJson} = await sql`SELECT * from basket WHERE (uuid = ${passId?.value}) AND (ticket_code = ${params.slug})`
-  if (!fileJson || !passId) redirect("/");
-
-  const newExpiration = new Date();
-  newExpiration.setMinutes(newExpiration.getMinutes() + 15);
- if(passId){
-//TODO: UPDATE COOKIES
-  sql`
-  UPDATE basket
-  SET date = ${newExpiration.toISOString()}
-  WHERE (uuid =${passId.value}) AND (ticket_code =${params.slug})
-  `
- }
-
- 
+  if (!fileJson) redirect("/");
 
   const { rows } =
     await sql`SELECT * from seats WHERE ticket_id = ${params.slug.toUpperCase()} ORDER BY seat_number ASC`;
+
+
   const newChunkedArray: QueryResultRow | number = [];
   for (let i = 0; i < rows.length; i += 6) {
     const chunk = rows.slice(i, i + 6);
@@ -37,8 +27,11 @@ export default async function Home({ params }: { params: { slug: string } }) {
       ...chunk.slice(3)
     );
   }
+
+
   return (
-    <main className="flex text-black  min-h-svh flex-col items-center py-3 px-3">
+    <main className="flex text-black  min-h-svh flex-col items-center ">
+    
       <Grid passId={passId!} ticketId={params.slug.toUpperCase()} passengerList={fileJson[0] as PassengerData} data={newChunkedArray as Seat[]}></Grid>
     </main>
   );
