@@ -1,5 +1,5 @@
 import { sql } from "@vercel/postgres";
-import { unstable_noStore as noStore } from "next/cache";
+
 import SearchConnection from "../components/(user)/home/searchConnection";
 import CardWrapper from "../components/(user)/home/cardWrapper";
 import DealsCard from "../components/(user)/home/dealsCard";
@@ -18,7 +18,7 @@ export default async function Home() {
         </h1>
         <SearchConnection airports={airports as Airport[]}></SearchConnection>
       </div>
-      <div className="w-full flex justify-center bg-gradient-to-b from-blue-200 to-[5%] pt-12">
+      <div className="w-full  flex justify-center bg-gradient-to-b from-blue-200 to-[5%] pt-12">
         <DealsCard></DealsCard>
       </div>
       <div className="w-full flex justify-center gap-5 flex-wrap px-12">

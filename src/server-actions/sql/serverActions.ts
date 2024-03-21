@@ -1,9 +1,9 @@
 "use server";
 
+import { EXPIRATION_TIME } from "@/src/globalValues";
 import { sql } from "@vercel/postgres";
 import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { cookies } from "next/headers";
-import { useRouter } from "next/navigation";
 
 export const handleInsertFlights = async (
   plane: Plane,
@@ -41,7 +41,6 @@ export const handleFindingConnection = async (
 };
 
 export const handleSelectingSeat = async (flightCode:string,passList:PassengerDetails[],passId:string) => {
-console.log(cookies())
 
   try {
 
@@ -63,7 +62,7 @@ return true;
 
 export const updateCookie = async (passId:RequestCookie,ticketId:string) =>{
   const newExpiration = new Date();
-  newExpiration.setMinutes(newExpiration.getMinutes() + 2);
+  newExpiration.setMinutes(newExpiration.getMinutes() + EXPIRATION_TIME);
   if(passId){
     //TODO: UPDATE COOKIES
     cookies().set('passid',passId.value,{expires:newExpiration})
@@ -71,6 +70,18 @@ export const updateCookie = async (passId:RequestCookie,ticketId:string) =>{
       sql`
       UPDATE basket
       SET date = ${newExpiration.toISOString()}
+      WHERE (uuid =${passId.value}) AND (ticket_code =${ticketId})
+      `
+     }
+}
+
+export const deleteCookie = async (passId:RequestCookie,ticketId:string) =>{
+  if(passId){
+    //TODO: UPDATE COOKIES
+    cookies().delete('passid')
+
+      sql`
+      DELETE FROM BASKET
       WHERE (uuid =${passId.value}) AND (ticket_code =${ticketId})
       `
      }

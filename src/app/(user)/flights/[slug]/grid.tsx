@@ -3,10 +3,9 @@ import {  useEffect, useRef, useState } from "react";
 import Seat from "./seat";
 import { ButtonBlue } from "@/src/utils/muiStyled/button";
 import { Box } from "@mui/material";
-import { handleSelectingSeat } from "@/src/server-actions/sql/serverActions";
+import { deleteCookie, handleSelectingSeat } from "@/src/server-actions/sql/serverActions";
 import { useRouter } from "next/navigation";
 import Error from "next/error";
-import { deleteFromBasket } from "../../userDetailsForm/updateBasket";
 import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import WarningModal from "./warningModal";
 export default function Grid({
@@ -20,11 +19,13 @@ export default function Grid({
   passId:RequestCookie,
   ticketId:string;
 }) {
-  const router = useRouter();
 
+
+
+  const router = useRouter();
 const [isGoingToExpire,setIsGoingToExpire] = useState(false)
   const expirationTime = new Date(passengerList.date)
-  console.log(expirationTime)
+
   const currentTime = new Date().getTime()
 const timeoutTime = expirationTime.getTime() - (1 * 60 * 1000);
 const fullTime =  expirationTime.getTime() - Date.now();
@@ -67,7 +68,8 @@ if(!e.seat){
 })
 const isSuccess = await handleSelectingSeat(ticketId,passList,passId.value)
 if(isSuccess){
-  router.push('/confirmation')
+  await deleteCookie(passId,ticketId)
+
 }
 else console.log('something went wrong')
 }

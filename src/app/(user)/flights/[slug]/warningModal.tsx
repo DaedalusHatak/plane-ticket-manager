@@ -2,14 +2,12 @@
 
 import { updateCookie } from "@/src/server-actions/sql/serverActions"
 import { ButtonBlue } from "@/src/utils/muiStyled/button"
-import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies"
-import { deleteFromBasket } from "../../userDetailsForm/updateBasket"
 import { useRouter } from "next/navigation"
 
 
 
 
-export default function WarningModal({passId,ticketId,setIsGoingToExpire,timeout}:any){
+export default function WarningModal({passId,ticketId,setIsGoingToExpire}:any){
 
     const router = useRouter();
 

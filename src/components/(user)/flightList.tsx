@@ -1,6 +1,6 @@
 "use client"
 
-import UserDetailsForm from "@/src/app/(user)/userDetailsForm/userDetailsForm";
+import UserDetailsForm from "@/src/components/(user)/userDetailsForm/userDetailsForm";
 import { Typography } from "@mui/material";
 import { useState } from "react";
 import FlightIcon from "@mui/icons-material/Flight";

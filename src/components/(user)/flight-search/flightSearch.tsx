@@ -4,7 +4,7 @@ import FlightIcon from "@mui/icons-material/Flight";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useState } from "react";
-import UserDetailsForm from "@/src/app/(user)/userDetailsForm/userDetailsForm";
+import UserDetailsForm from "@/src/components/(user)/userDetailsForm/userDetailsForm";
 import FlightList from "../flightList";
 function Loading() {
   return (
