@@ -21,7 +21,6 @@ export default function Grid({
 }) {
 
 
-
   const router = useRouter();
 const [isGoingToExpire,setIsGoingToExpire] = useState(false)
   const expirationTime = new Date(passengerList.date)
@@ -34,23 +33,25 @@ const delay = timeoutTime - Date.now();
 
 const timeoutRef = useRef<NodeJS.Timeout>();
 
-if(timeoutTime > currentTime){
-  setTimeout(()=>{
-    console.log('delayTimeout')
-    setIsGoingToExpire(true)
-    },delay)
 
-}
 
 
 useEffect(()=>{
-  timeoutRef.current = setTimeout(()=>{
+  if(timeoutTime > currentTime){
+    console.log('delaaqaayy')
+     timeoutRef.current = setTimeout(()=>{
+      setIsGoingToExpire(true)
+      },delay)
+  
+  }
+  const timeout  = setTimeout(()=>{
 
     router.push('/')
  
   },fullTime)
-return () => clearTimeout(timeoutRef.current)
-},[fullTime,router,isGoingToExpire])
+return () =>{clearTimeout(timeoutRef.current);
+   clearTimeout(timeout)}
+},[currentTime,timeoutTime,delay,fullTime,router,isGoingToExpire])
 
 
 
@@ -96,7 +97,9 @@ else console.log('something went wrong')
       if (newArray[idx].is_taken === false) {
         newArray[idx] = updatedElement;
         newArray.forEach((e, i) => {
-          if(i !== idx && e.uuid && passId.value ===  e.uuid){
+         
+          if(e.name === updatedElement.name && i !== idx && e.uuid && passId.value ===  e.uuid){
+            console.log("isTaken",i)
             const updatedData = { ...e, is_taken: false };
             delete updatedData.name;
             delete updatedData.uuid;
@@ -126,9 +129,9 @@ else console.log('something went wrong')
       <section className={`text-black w-full py-3 px-3 ${isGoingToExpire ? 'max-h-svh overflow-hidden' : ''}`}>
 
 
-<Box  className=" bg-white  sm:w-[300px] shadow-md lg:absolute mb-10 rounded-lg p-4">
+<Box  className=" bg-white    sm:w-[300px] shadow-md border-slate-300 border sm:fixed top-4 mb-10 rounded-lg z-10 p-4">
 <h3 className="text-xl font-semibold border-b pb-2 mb-4">Passenger List</h3>
-<ul className="list-none m-0 p-0">
+<ul className="list-none m-0 p-0 ">
 {passList.map((passenger:PassengerDetails,idx:number) => (
 <li key={idx} onClick={e=>setIndex(idx)} className={`flex cursor-pointer items-center px-2 rounded-md  ${index === idx ? 'bg-slate-400' : 'bg-slate-200'} mb-2`}>
 <span className="flex-auto font-medium">{passenger.firstName + " " + passenger.lastName}</span>
@@ -144,7 +147,7 @@ else console.log('something went wrong')
 </ul>
 </Box>
 
-<div className="overflow-y-hidden w-full  flex justify-center">
+<div className="overflow-y-hidden w-full border-t border-slate-400  flex justify-center">
 <div className=" grid grid-cols-[repeat(7,minmax(0,min-content))] gap-3 border-plane ">
 {chunkedArray.map((element: Seat, index: number) => (
 <div
