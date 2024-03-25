@@ -96,6 +96,7 @@ export default function UserDetailsForm({ forward, setForward,flightCode }: any)
               variant="contained"
               fullWidth
               type="submit"
+              onClick={e=>window.scrollTo(0,0)}
             >
               Continue
             </ButtonBlue>
