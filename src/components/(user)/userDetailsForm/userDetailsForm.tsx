@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { handleSubmitForm } from "./submitPassengers";
 
-export default function UserDetailsForm({ forward, setForward }: any) {
+export default function UserDetailsForm({ forward, setForward,flightCode }: any) {
   const [passengerAmount, setPassengerAmount] = useState(0);
   const [error, setError] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
@@ -96,6 +96,7 @@ export default function UserDetailsForm({ forward, setForward }: any) {
               variant="contained"
               fullWidth
               type="submit"
+              onClick={e=>window.scrollTo(0,0)}
             >
               Continue
             </ButtonBlue>

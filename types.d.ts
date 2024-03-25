@@ -6,6 +6,7 @@ type Seat = {
  seat_number:string;
  name?:string;
  paid:boolean;
+ uuid?:string;
 };
 type SeatMongo = {
   _id: ObjectId | string;
@@ -45,7 +46,8 @@ type ErrorLabels = {
 type PassengerData = {
   date: Date | string;
   uuid: string;
-  data: JsonData[];
+  passenger_list: JsonData[];
+  ticket_code:string;
 };
 type PassengerDetails = {
   firstName: string;

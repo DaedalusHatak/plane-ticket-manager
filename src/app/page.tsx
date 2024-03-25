@@ -1,12 +1,12 @@
 import { sql } from "@vercel/postgres";
-import { unstable_noStore as noStore } from "next/cache";
+
 import SearchConnection from "../components/(user)/home/searchConnection";
 import CardWrapper from "../components/(user)/home/cardWrapper";
 import DealsCard from "../components/(user)/home/dealsCard";
 import LatestFlights from "../components/(user)/home/latestFlights";
 
 export default async function Home() {
-  noStore();
+
   const { rows: airports } = await sql`SELECT * from airports`;
   const { rows: flights } =
     await sql`SELECT * from flights order by id desc limit 5`;
@@ -18,7 +18,7 @@ export default async function Home() {
         </h1>
         <SearchConnection airports={airports as Airport[]}></SearchConnection>
       </div>
-      <div className="w-full flex justify-center bg-gradient-to-b from-blue-200 to-[5%] pt-12">
+      <div className="w-full  flex justify-center bg-gradient-to-b from-blue-200 to-[5%] pt-12">
         <DealsCard></DealsCard>
       </div>
       <div className="w-full flex justify-center gap-5 flex-wrap px-12">
@@ -27,8 +27,8 @@ export default async function Home() {
         </h1>
         <LatestFlights flights={flights} />
       </div>
-      <div>
-        <h1 className="text-4xl w-full max-w-5xl font-semibold mt-28 mb-5 px-12">
+      <div className="px-12">
+        <h1 className="text-4xl w-full max-w-5xl font-semibold mt-28 mb-5 ">
           Why choose KicAir
         </h1>
         <CardWrapper></CardWrapper>

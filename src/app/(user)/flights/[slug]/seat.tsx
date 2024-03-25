@@ -2,20 +2,27 @@ import { useState } from "react";
 
 export default function Seat({
   seat,
-  
+  isPassenger,
   setNewSeat,
 }: {
   seat: Seat;
+  isPassenger:PassengerData;
   setNewSeat: Function;
 }) {
   const [showSeat, setShowSeat] = useState<Seat | null>();
-  const name = seat.name ? seat.name : "";
+   function getName() {
 
-  const initials = name
-    .split(" ")
-    .map((e) => e.charAt(0))
-    .join("")
-    .toUpperCase();
+    const passenger = isPassenger.passenger_list.find(e => e.firstName + " " + e.lastName === seat.name && isPassenger.uuid === seat.uuid);
+
+    return passenger ? seat.name : "";
+}
+const name = getName();
+
+  const initials = name ? name
+  .split(" ")
+  .map((e:string) => e.charAt(0))
+  .join("")
+  .toUpperCase() : "";
   return (
     <div className="relative flex origin-center text-white font-semibold">
       {showSeat &&
@@ -37,7 +44,7 @@ export default function Seat({
         onMouseEnter={(e) => setShowSeat(seat)}
         onMouseLeave={(e) => setShowSeat(null)}
         onClick={(e) => setNewSeat(seat)}
-        className={`h-8 w-8  ${seat.is_taken ? "bg-red-400" : ""}`}
+        className={`h-8 w-8  ${seat.uuid !== isPassenger.uuid && seat.is_taken ? "bg-red-900" : ""}  ${seat.is_taken ? "bg-red-400" : ""}`}
         disabled={seat.is_taken}
       >
         {initials}
