@@ -21,8 +21,8 @@ export default async function Home() {
       <div className="w-full  flex justify-center bg-gradient-to-b from-blue-200 to-[5%] pt-12">
         <DealsCard></DealsCard>
       </div>
-      <div className="w-full flex justify-center gap-5 flex-wrap px-12">
-        <h1 className="text-4xl pt-28 w-full max-w-5xl font-semibold">
+      <div className="w-full flex justify-center gap-5 flex-wrap column flex-col items-center  px-12">
+        <h1 className="text-4xl text-center pt-28 w-full max-w-5xl font-semibold">
           Latest flights
         </h1>
         <LatestFlights flights={flights} />
